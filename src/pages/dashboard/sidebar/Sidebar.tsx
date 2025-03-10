@@ -1,7 +1,9 @@
 import { useSidebarOpen } from "../../../states/useSidebarOpen";
+import { SquareX } from 'lucide-react';
+
 
 const Sidebar = () => {
-  const { isOpen } = useSidebarOpen();
+  const { isOpen, toggleSidebar } = useSidebarOpen();
 
   return (
     <aside
@@ -9,6 +11,9 @@ const Sidebar = () => {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } fixed lg:static inset-y-0 left-0 lg:flex flex-col`}
     >
+      <div className="lg:hidden">
+        <SquareX size={24} onClick={() => toggleSidebar()} />
+      </div>
       <a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">
         Dashboard
       </a>

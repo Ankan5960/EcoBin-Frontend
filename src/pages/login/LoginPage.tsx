@@ -2,6 +2,7 @@ import { Button, TextField, Typography, Paper } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -9,13 +10,12 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     console.log("Logging in with", email, password);
-    // Add authentication logic here
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <Paper className="p-6 w-full max-w-md shadow-lg rounded-2xl">
-        <Typography variant="h4" className="text-center text-green-600 font-bold mb-4">
+        <Typography variant="h4" className="text-center text-green-600 font-extrabold mb-4">
           Login to EcoBin
         </Typography>
         <TextField
@@ -53,6 +53,7 @@ const LoginPage = () => {
           > Sign Up</span>
         </Typography>
       </Paper>
+      
     </div>
   );
 };
