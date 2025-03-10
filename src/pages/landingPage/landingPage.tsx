@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
@@ -14,14 +14,14 @@ const LandingPage = () => {
         </p>
         <div className="flex gap-4 mt-6 justify-between">
           <Button
-            variant="contained"
+            variant="primary_blue"
             color="primary"
             onClick={() => navigate("/login")}
           >
             Log In
           </Button>
           <Button
-            variant="outlined"
+            variant="outline"
             color="secondary"
             onClick={() => navigate("/signup")}
           >

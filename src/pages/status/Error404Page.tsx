@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 export default function Error404Page() {
@@ -6,7 +6,7 @@ export default function Error404Page() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 text-center">
       <div className="max-w-lg p-8 bg-white shadow-lg rounded-2xl">
-        <h1 className="text-6xl font-bold text-green-600">404</h1>
+        <h1 className="text-6xl font-bold text-red-600">404</h1>
         <h2 className="text-2xl font-semibold text-gray-700 mt-4">
           Page Not Found
         </h2>
@@ -14,8 +14,7 @@ export default function Error404Page() {
           Oops! The page you're looking for doesn't exist.
         </p>
         <Button
-          variant="contained"
-          color="primary"
+          variant="primary_green"
           className="mt-6"
           onClick={() => navigate("/")}
         >
