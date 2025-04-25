@@ -1,0 +1,127 @@
+[
+    {
+        "dustbinId": "19553670-84bb-4c4f-b781-aee09f4bb602",
+        "location": {
+            "latitude": "22.608222523204105",
+            "longitude": "88.43772709735156"
+        },
+        "region": {
+            "countryName": "india",
+            "regionName": "west bengal",
+            "districtName": "north 24 parganas",
+            "placeName": "rajarhat",
+            "addressName": "sh3, 700102, hatiara, rajarhat, north 24 parganas, west bengal, india",
+            "pinCode": "700102"
+        },
+        "sensorData": {
+            "weightData": "33",
+            "airQualityData": "234",
+            "levelFillData": "67"
+        },
+        "category": {
+            "catagoryId": "62ad9f28-3b86-4046-8f1c-0c6b4fc24e0c",
+            "catagoryName": "Dry waste"
+        },
+        "distanceFromUser": "1.84"
+    },
+    {
+        "dustbinId": "8a6f6b9f-6a82-47fa-8cc4-333ac01902d1",
+        "location": {
+            "latitude": "22.588729378069363",
+            "longitude": "88.45256901142737"
+        },
+        "region": {
+            "countryName": "india",
+            "regionName": "west bengal",
+            "districtName": "north 24 parganas",
+            "placeName": "rajarhat",
+            "addressName": "street number 66, action area 1, 700163, new town, rajarhat, north 24 parganas, west bengal, india",
+            "pinCode": "700163"
+        },
+        "sensorData": {
+            "weightData": "50",
+            "airQualityData": "3",
+            "levelFillData": "54"
+        },
+        "category": {
+            "catagoryId": "62ad9f28-3b86-4046-8f1c-0c6b4fc24e0c",
+            "catagoryName": "Dry waste"
+        },
+        "distanceFromUser": "3.98"
+    },
+    {
+        "dustbinId": "a56401bb-9c1b-4c43-9631-0522260a0c92",
+        "location": {
+            "latitude": "22.58285791084898",
+            "longitude": "88.47180771949054"
+        },
+        "region": {
+            "countryName": "india",
+            "regionName": "west bengal",
+            "districtName": "north 24 parganas",
+            "placeName": "rajarhat",
+            "addressName": "street number 66, action area 1, 700163, new town, rajarhat, north 24 parganas, west bengal, india",
+            "pinCode": "700163"
+        },
+        "sensorData": {
+            "weightData": "40",
+            "airQualityData": "36",
+            "levelFillData": "34"
+        },
+        "category": {
+            "catagoryId": "62ad9f28-3b86-4046-8f1c-0c6b4fc24e0c",
+            "catagoryName": "Dry waste"
+        },
+        "distanceFromUser": "5.35"
+    },
+    {
+        "dustbinId": "d0d8edfc-6356-4b16-8f5b-82ef8238c335",
+        "location": {
+            "latitude": "22.576514354290968",
+            "longitude": "88.46519658330998"
+        },
+        "region": {
+            "countryName": "india",
+            "regionName": "west bengal",
+            "districtName": "north 24 parganas",
+            "placeName": "rajarhat",
+            "addressName": "street 175, action area 1c, 700059, new town, rajarhat, north 24 parganas, west bengal, india",
+            "pinCode": "700059"
+        },
+        "sensorData": {
+            "weightData": "43",
+            "airQualityData": "16",
+            "levelFillData": "44"
+        },
+        "category": {
+            "catagoryId": "62ad9f28-3b86-4046-8f1c-0c6b4fc24e0c",
+            "catagoryName": "Dry waste"
+        },
+        "distanceFromUser": "5.67"
+    },
+    {
+        "dustbinId": "0c2e3cc4-f1bb-4ed8-9196-447cacb555c0",
+        "location": {
+            "latitude": "22.578938857566992",
+            "longitude": "88.47583619832572"
+        },
+        "region": {
+            "countryName": "india",
+            "regionName": "west bengal",
+            "districtName": "north 24 parganas",
+            "placeName": "rajarhat",
+            "addressName": "street 247, action area 1d, 700059, new town, rajarhat, north 24 parganas, west bengal, india",
+            "pinCode": "700059"
+        },
+        "sensorData": {
+            "weightData": "20",
+            "airQualityData": "54",
+            "levelFillData": "64"
+        },
+        "category": {
+            "catagoryId": "62ad9f28-3b86-4046-8f1c-0c6b4fc24e0c",
+            "catagoryName": "Dry waste"
+        },
+        "distanceFromUser": "5.94"
+    }
+]
