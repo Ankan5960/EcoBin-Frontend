@@ -1,10 +1,10 @@
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
-import { useSidebarOpen } from "../../../states/useSidebarOpen";
 import { SquareX } from 'lucide-react';
+import { useSidebarStore } from "@/store/useSidebarStore";
 
 
 const Sidebar = () => {
-  const { isOpen, toggleSidebar } = useSidebarOpen();
+  const { isOpen, toggleSidebar } = useSidebarStore();
 
   return (
     <aside

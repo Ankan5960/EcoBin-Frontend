@@ -1,16 +1,16 @@
-import { useSidebarOpen } from "../../../states/useSidebarOpen";
 import { AvtarDropdown } from "@/components/component/AvtarDropdown";
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
+import { useSidebarStore } from "@/store/useSidebarStore";
 import { Menu } from "lucide-react";
 
 const Navbar = () => {
-  const { toggleSidebar } = useSidebarOpen();
+  const { toggleSidebar } = useSidebarStore();
 
   return (
     <nav className={`${DEFAULT_ITEM_PROPERTIES.themeColor.navbar} text-white p-4 flex justify-between items-center`}>
       <div className="flex gap-1.5">
         <div className="lg:hidden flex justify-center items-center">
-          <div onClick={() => toggleSidebar()}>
+          <div onClick={toggleSidebar}>
             <Menu color="black" size={24} />
           </div>
         </div>
