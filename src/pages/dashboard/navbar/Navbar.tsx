@@ -1,15 +1,16 @@
-import { useSidebarOpen } from "../../../states/useSidebarOpen";
 import { AvtarDropdown } from "@/components/component/AvtarDropdown";
+import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
+import { useSidebarStore } from "@/store/useSidebarStore";
 import { Menu } from "lucide-react";
 
 const Navbar = () => {
-  const { toggleSidebar } = useSidebarOpen();
+  const { toggleSidebar } = useSidebarStore();
 
   return (
-    <nav className="bg-green-600 text-white p-4 flex justify-between items-center">
+    <nav className={`${DEFAULT_ITEM_PROPERTIES.themeColor.navbar} text-white p-4 flex justify-between items-center`}>
       <div className="flex gap-1.5">
         <div className="lg:hidden flex justify-center items-center">
-          <div onClick={() => toggleSidebar()}>
+          <div onClick={toggleSidebar}>
             <Menu color="black" size={24} />
           </div>
         </div>
@@ -19,7 +20,7 @@ const Navbar = () => {
             alt="EcoBin Logo"
             className="h-5 w-auto sm:h-6 md:h-6 lg:h-8"
           />
-          <h1 className=" text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
+          <h1 className=" text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold pl-2">
             EcoBin
           </h1>
         </div>

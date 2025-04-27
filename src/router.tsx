@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import Error404Page from "./pages/status/Error404Page";
 import LandingPage from "./pages/landingPage/landingPage";
 import Dashboard from "./pages/dashboard/Dashboard";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/Signup/signUpPage";
+import AdminPage from "./pages/admin/AdminPage";
 
 const routes = [
   {
@@ -24,9 +24,13 @@ const routes = [
     element: <Dashboard />,
   },
   {
+    path: "/admin",
+    element: <AdminPage />
+  },
+  {
     path: "*",
     element: <Error404Page />,
-  },
+  }
 ];
 
 const router = createBrowserRouter(routes);
