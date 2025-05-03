@@ -2,22 +2,35 @@ import { Button, TextField, Typography, Paper } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-const LoginPage = () => {
+const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    console.log("Logging in with", email, password);
+  const handleSignUp = () => {
+    console.log("Signing up with", name, email, password);
+    // Add authentication logic here
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <Paper className="p-6 w-full max-w-md shadow-lg rounded-2xl">
-        <Typography variant="h4" className="text-center text-green-600 font-extrabold mb-4">
-          Login to EcoBin
+        <Typography
+          variant="h4"
+          className="text-center text-green-600 font-bold mb-4"
+        >
+          Sign Up for EcoBin
         </Typography>
+        <TextField
+          label="Full Name"
+          type="text"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <TextField
           label="Email"
           type="email"
@@ -41,21 +54,23 @@ const LoginPage = () => {
           color="primary"
           fullWidth
           className="mt-4"
-          onClick={handleLogin}
+          onClick={handleSignUp}
         >
-          Log In
+          Sign Up
         </Button>
         <Typography variant="body2" className="text-center mt-4">
-          Don't have an account? 
+          Already have an account?
           <span
             className="text-green-600 cursor-pointer"
-            onClick={() => navigate("/signup")}
-          > Sign Up</span>
+            onClick={() => navigate("/login")}
+          >
+            {" "}
+            Log In
+          </span>
         </Typography>
       </Paper>
-      
     </div>
   );
 };
 
-export default LoginPage;
+export default Signup;

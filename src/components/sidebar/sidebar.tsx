@@ -15,14 +15,20 @@ const Sidebar = () => {
       <div className="lg:hidden">
         <SquareX size={24} onClick={() => toggleSidebar()} />
       </div>
-      <a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">
+      <a href="/dashboard" className="block py-2 px-4 rounded hover:bg-gray-700">
         Dashboard
       </a>
-      <a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">
-        Reports
+      <a href="/dashboard/admin" className="block py-2 px-4 rounded hover:bg-gray-700">
+        Admin Panel
       </a>
-      <a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">
+      <a href="/dashboard/settings" className="block py-2 px-4 rounded hover:bg-gray-700">
         Settings
+      </a>
+      <a href="/dashboard/contactus" className="block py-2 px-4 rounded hover:bg-gray-700">
+        Contact us
+      </a>
+      <a href="/dashboard/report" className="block py-2 px-4 rounded hover:bg-gray-700">
+        Report
       </a>
     </aside>
   );

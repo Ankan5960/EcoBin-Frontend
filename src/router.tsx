@@ -1,40 +1,75 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Error404Page from "./pages/status/Error404Page";
-import LandingPage from "./pages/landingPage/landingPage";
-import Dashboard from "./pages/dashboard/Dashboard";
-import LoginPage from "./pages/login/LoginPage";
-import SignupPage from "./pages/Signup/signUpPage";
-import AdminPage from "./pages/admin/AdminPage";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouteObject,
+  RouterProvider,
+} from "react-router-dom";
+import Error404Page from "./pages/error-page/Error404Page";
+import Dashboard from "./pages/dashboard/dashboard";
+import Login from "./pages/login-page/login";
+import Root from "./pages/root/root";
+import Signup from "./pages/signup-page/signup";
+import AdminPanel from "./pages/admin/admin";
+import Map from "./pages/map/map";
+import Settings from "./pages/setting-page/setting";
+import Report from "./pages/report-page/report";
+import ContactUs from "./pages/contactus-page/contactUs";
+import AppLayout from "./components/layout/AppLayout";
 
-const routes = [
+const routes: RouteObject[] = [
   {
     path: "/",
-    element: <LandingPage />,
+    element: <Root />,
+    errorElement: <Error404Page />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/dashboard" replace />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+        children: [
+          {
+            index: true,
+            element: <Map />,
+          },
+          {
+            path: "admin",
+            element: <AdminPanel />,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
+          },
+          {
+            path: "report",
+            element: <Report />,
+          },
+          {
+            path: "contactus",
+            element: <ContactUs />,
+          },
+        ],
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
   },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignupPage />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/admin",
-    element: <AdminPage />
-  },
-  {
-    path: "*",
-    element: <Error404Page />,
-  }
 ];
 
 const router = createBrowserRouter(routes);
 
 export default function AppRouter() {
-  return <RouterProvider router={router} />;
+  return (
+    <AppLayout>
+      <RouterProvider router={router} />
+    </AppLayout>
+  );
 }

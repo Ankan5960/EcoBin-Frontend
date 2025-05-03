@@ -1,4 +1,4 @@
-import { AvtarDropdown } from "@/components/component/AvtarDropdown";
+import { AvtarDropdown } from "@/components/avatardropdown/avtarDropdown";
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { Menu } from "lucide-react";
@@ -20,7 +20,7 @@ const Navbar = () => {
             alt="EcoBin Logo"
             className="h-5 w-auto sm:h-6 md:h-6 lg:h-8"
           />
-          <h1 className=" text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold pl-2">
+          <h1 className={`${DEFAULT_ITEM_PROPERTIES.heading.heading1} " pl-2`}>
             EcoBin
           </h1>
         </div>

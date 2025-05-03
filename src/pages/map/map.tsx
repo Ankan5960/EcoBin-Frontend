@@ -1,3 +1,4 @@
+import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -6,8 +7,8 @@ import {
   DustbinData,
   LocationData,
   SensorData,
-} from "@/types/DustbinTypes";
-import { useUserLocationStore } from "@/store/useUserLocationStore";
+} from "@/types/dustbinTypes";
+import useLocationStore from "@/store/useUserLocationStore";
 
 const generatePopupContent = (
   sensorData: SensorData,
@@ -23,28 +24,6 @@ const generatePopupContent = (
   `;
 };
 
-const getUserLocation = (
-  setUserLocation: (location: LocationData) => void
-): Promise<LocationData> => {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        resolve({
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString(),
-        });
-        setUserLocation({
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString(),
-        });
-      },
-      (error) => {
-        reject(error);
-      }
-    );
-  });
-};
-
 const mapBoxConfiguration = (
   mapContainerRef: React.RefObject<HTMLDivElement | null>,
   userLocation: LocationData | null
@@ -58,10 +37,7 @@ const mapBoxConfiguration = (
   const map = new mapboxgl.Map({
     container: mapContainerRef.current!,
     style: "mapbox://styles/mapbox/streets-v11",
-    center: [
-      Number(userLocation?.longitude) || 88.3639,
-      Number(userLocation?.latitude) || 22.5726,
-    ],
+    center: [Number(userLocation?.longitude), Number(userLocation?.latitude)],
     zoom: 12,
   });
 
@@ -106,30 +82,36 @@ const handleMapLoad = async (map: mapboxgl.Map) => {
   });
 };
 
-const MapComponent: React.FC = () => {
+const Map: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const { userLocation, setUserLocation } = useUserLocationStore();
+  const city = useLocationStore((state) => state.city);
+  const location = useLocationStore((state) => state.location);
 
   useEffect(() => {
-    const map = mapBoxConfiguration(mapContainerRef, userLocation);
-
+    const map = mapBoxConfiguration(mapContainerRef, location);
     handleMapLoad(map);
 
-    if (!userLocation) {
-      getUserLocation(setUserLocation);
-    }
-
     return () => map.remove();
-  }, []);
+  }, [handleMapLoad, location]);
 
   return (
-    <div className="relative">
-      <div
-        ref={mapContainerRef}
-        className="h-[600px] w-full rounded-lg shadow-md"
-      />
-    </div>
+    <main className="flex-1 p-6 bg-gray-100 overflow-hidden">
+      <h1 className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} " mb-4`}>
+        EcoBin Map
+      </h1>
+      <h1>Your City: {city || "Loading..."}</h1>
+      <h1>
+        Your Location: Latitude: {location?.latitude || "Loading..."},
+        Longitude: {location?.longitude || "Loading..."}
+      </h1>
+      <div className="relative">
+        <div
+          ref={mapContainerRef}
+          className="h-[calc(100vh-230px)] w-full rounded-lg shadow-md"
+        />
+      </div>
+    </main>
   );
 };
 
-export default MapComponent;
+export default Map;
