@@ -18,9 +18,9 @@ export interface SensorData {
   levelFillData: string;
 }
 
-export interface CatagoryEntity {
-  catagoryId: string;
-  catagoryName: string;
+export interface CategoryEntity {
+  categoryId: string;
+  categoryName: string;
 }
 
 export interface DustbinData {
@@ -28,6 +28,6 @@ export interface DustbinData {
   location: LocationData;
   region: RegionData;
   sensorData: SensorData;
-  category: CatagoryEntity;
+  category: CategoryEntity;
   distanceFromUser: string;
 }

@@ -3,23 +3,24 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
-  CatagoryEntity,
+  CategoryEntity,
   DustbinData,
   LocationData,
   SensorData,
 } from "@/types/dustbinTypes";
 import useLocationStore from "@/store/useUserLocationStore";
+import { useDustbinData } from "@/hooks/useDustbinData";
 
 const generatePopupContent = (
   sensorData: SensorData,
-  category: CatagoryEntity
+  category: CategoryEntity
 ): string => {
   return `
     <div style="padding: 8px; background: white; font-size: 15px; color: black; border-radius: 5px;">
       <strong>Weight:</strong> ${sensorData.weightData}<br/>
       <strong>Air Quality:</strong> ${sensorData.airQualityData}<br/>
       <strong>Fill:</strong> ${sensorData.levelFillData}<br/>
-      <strong>Category:</strong> ${category.catagoryName}
+      <strong>Category:</strong> ${category.categoryName}
     </div>
   `;
 };
@@ -48,25 +49,20 @@ const mapBoxConfiguration = (
   return map;
 };
 
-const handleMapLoad = async (map: mapboxgl.Map) => {
-  map.on("load", () => {
-    fetch("./data/marker.json")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Marker data:", data);
+const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[] ) => {
         const popups: mapboxgl.Popup[] = [];
 
-        data.forEach((marker: DustbinData) => {
+        datas.forEach((data: DustbinData) => {
           const popup = new mapboxgl.Popup().setHTML(
-            generatePopupContent(marker.sensorData, marker.category)
+            generatePopupContent(data.sensorData, data.category)
           );
 
           new mapboxgl.Marker({
             color: "red",
           })
             .setLngLat([
-              Number(marker.location.longitude),
-              Number(marker.location.latitude),
+              Number(data.location.longitude),
+              Number(data.location.latitude),
             ])
             .setPopup(popup)
             .addTo(map);
@@ -77,22 +73,22 @@ const handleMapLoad = async (map: mapboxgl.Map) => {
         setTimeout(() => {
           popups.forEach((p) => p.remove());
         }, 5000);
-      })
-      .catch((error) => console.error("Error loading markers:", error));
-  });
 };
 
 const Map: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const city = useLocationStore((state) => state.city);
   const location = useLocationStore((state) => state.location);
+  const {data} = useDustbinData();
 
   useEffect(() => {
     const map = mapBoxConfiguration(mapContainerRef, location);
-    handleMapLoad(map);
+    if (data) {
+      handleMapLoad(map, data);
+    }
 
     return () => map.remove();
-  }, [handleMapLoad, location]);
+  }, [data, location]);
 
   return (
     <main className="flex-1 p-6 bg-gray-100 overflow-hidden">
