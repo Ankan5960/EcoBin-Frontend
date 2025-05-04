@@ -32,7 +32,7 @@ const AdminPanel: React.FC = () => {
     setResponseType(null);
 
     try {
-      const res = await fetch(URLs.AdminSetupUrl, {
+      const res = await fetch(URLs.EcoBin_Sensor_Data_Service+"/AdminSetup/setup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

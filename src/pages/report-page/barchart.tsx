@@ -1,3 +1,4 @@
+import { DustbinStatusList } from "@/types/reportTypes";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,12 +17,7 @@ ChartJS.register(
   Legend
 );
 
-export type Props = {
-  wet: number[];
-  dry: number[];
-};
-
-export function BarChart(props: Props) {
+export const BarChart: React.FC<DustbinStatusList> = ({ dustbinStatusList }) => {
   const options = {
     responsive: true,
     plugins: {
@@ -35,30 +31,22 @@ export function BarChart(props: Props) {
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-
   const data = {
-    labels,
-    datasets: [
-      {
-        label: "Wet waste",
-        data: props.wet,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Dry waste",
-        data: props.dry,
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
+    labels: dustbinStatusList.map((status) => status.statusName),
+    datasets: [{
+      label: 'Number of Dustbin',
+      data: dustbinStatusList.map((status) => (status.statusValue)),
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(75, 192, 192)',
+      ]
+    }]
   };
   return <Bar options={options} data={data} />;
 }

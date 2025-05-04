@@ -1,20 +1,16 @@
+import { DustbinCategoryList } from "@/types/reportTypes";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export type Props = {
-  wet: string;
-  dry: string;
-};
-
-export function DoughnutChart(props: Props) {
+export const DoughnutChart: React.FC<DustbinCategoryList> = ({dustbinCategoryList}) => {
   const data = {
-    labels: ["Wet waste", "Dry Waste"],
+    labels: dustbinCategoryList.map((category) => category.categoryName),
     datasets: [
       {
-        label: "Waste Composition",
-        data: [parseInt(props.wet), parseInt(props.dry)],
+        label: "Number of Categories   ",
+        data: dustbinCategoryList.map((category) => category.count),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",

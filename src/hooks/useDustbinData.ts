@@ -1,7 +1,6 @@
+import { fetchDustbinData } from "@/api/dustbinDataApi";
 import useLocationStore from "@/store/useUserLocationStore";
 import { DustbinData, LocationData } from "@/types/dustbinTypes";
-import { URLs } from "@/URLs/urls";
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
 export function useDustbinData() {
@@ -19,17 +18,14 @@ export function useDustbinData() {
 
     if (!hasLocationChanged && data) return;
 
-    const fetchData = async () => {
+    const loadData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get<DustbinData[]>(URLs.DustbinDataUrl, {
-          params: {
-            Latitude: locationData?.latitude || "",
-            Longitude: locationData?.longitude || "",
-            // ZoomLevel: zoomLevel,
-          },
-        });
-        setData(res.data);
+        const res = await fetchDustbinData(
+          locationData?.latitude || "",
+          locationData?.longitude || ""
+        );
+        setData(res);
         lastLocation.current = {
           latitude: locationData?.latitude || "",
           longitude: locationData?.longitude || "",
@@ -42,8 +38,9 @@ export function useDustbinData() {
       }
     };
 
-    fetchData();
-  }, [data, locationData?.latitude, locationData?.longitude]);
+    loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ locationData?.latitude, locationData?.longitude]);
 
   return { data, loading };
 }
