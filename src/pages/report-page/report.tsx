@@ -1,4 +1,3 @@
-import type React from "react";
 import { BarChart3, PieChart, Trash2, Leaf, Download } from "lucide-react"; // Example icons
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { DoughnutChart } from "./doughnutchart";

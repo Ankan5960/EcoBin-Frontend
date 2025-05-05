@@ -1,6 +1,6 @@
-import { fetchDustbinData } from "@/api/dustbinDataApi";
+import { fetchDustbinData } from "@/api/axios";
 import useLocationStore from "@/store/useUserLocationStore";
-import { DustbinData, LocationData } from "@/types/dustbinTypes";
+import type { DustbinData, LocationData } from "@/types/dustbinTypes";
 import { useEffect, useRef, useState } from "react";
 
 export function useDustbinData() {
@@ -39,8 +39,7 @@ export function useDustbinData() {
     };
 
     loadData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ locationData?.latitude, locationData?.longitude]);
+  }, [locationData?.latitude, locationData?.longitude, data]);
 
   return { data, loading };
 }

@@ -1,5 +1,5 @@
-import { fetchReportData } from "@/api/reportDataApi";
-import { ReportDataResponse } from "@/types/reportTypes";
+import { fetchReportData } from "@/api/axios";
+import type { ReportDataResponse } from "@/types/reportTypes";
 import { useEffect, useState } from "react";
 
 export const useReportData = () => {

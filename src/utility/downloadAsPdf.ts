@@ -1,12 +1,31 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+function replaceUnsupportedColors(container: HTMLElement) {
+  const elements = container.querySelectorAll("*");
+  for (const el of elements) {
+    const computedStyle = window.getComputedStyle(el as HTMLElement);
+    const bgColor = computedStyle.backgroundColor;
+    const color = computedStyle.color;
+
+    if (bgColor.includes("oklch")) {
+      (el as HTMLElement).style.backgroundColor = "#ffffff"; // fallback
+    }
+    if (color.includes("oklch")) {
+      (el as HTMLElement).style.color = "#000000"; // fallback
+    }
+  }
+}
+
 export async function downloadAsPdf(elementId: string, filename: string) {
   const element = document.getElementById(elementId);
   if (!element) {
     alert("Report content not found.");
     return;
   }
+  replaceUnsupportedColors(element);
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   const canvas = await html2canvas(element, {
     scale: 2, // better quality

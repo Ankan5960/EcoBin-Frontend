@@ -1,8 +1,9 @@
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
-import React, { useEffect, useRef } from "react";
+import type React from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import {
+import type {
   CategoryEntity,
   DustbinData,
   LocationData,
@@ -39,7 +40,7 @@ const mapBoxConfiguration = (
     container: mapContainerRef.current!,
     style: "mapbox://styles/mapbox/streets-v11",
     center: [Number(userLocation?.longitude), Number(userLocation?.latitude)],
-    zoom: 12,
+    zoom: 14,
   });
 
   map.addControl(new mapboxgl.NavigationControl());

@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
-import { URLs } from "@/URLs/urls";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
-type AdminFormInputs = {
-  dustbinType: string;
-};
-
-type ApiResponseError = {
-  error: string;
-  message?: string;
-};
+import { deleteSetup, fetchSetup, postSetup } from "@/api/axios";
+import { AdminFormInputs } from "@/types/adminApiTypes";
+import { DustbinDetailsDataResponseModel } from "@/types/DustbinDetailsDataResponseModel";
+import axios from "axios";
 
 const AdminPanel: React.FC = () => {
   const {
@@ -26,38 +20,63 @@ const AdminPanel: React.FC = () => {
     null
   );
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [fetchedData, setFetchedData] =
+    useState<DustbinDetailsDataResponseModel | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [deleteMessage, setDeleteMessage] = useState<string>("");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  //const [fetchId, setFetchId] = useState("");
 
   const onSubmit: SubmitHandler<AdminFormInputs> = async (data) => {
     setResponseMessage("");
     setResponseType(null);
 
     try {
-      const res = await fetch(URLs.EcoBin_Sensor_Data_Service+"/AdminSetup/setup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (res.ok) {
-        const successResult = result;
-        setResponseMessage(successResult);
-        setResponseType("success");
-        reset();
-      } else {
-        const errorResult = result as ApiResponseError;
-        setResponseMessage(
-          errorResult.error || errorResult.message || `Error: ${res.statusText}`
-        );
-        setResponseType("error");
-      }
+      const res = await postSetup(data);
+      setResponseMessage(res); // Assuming the response is a string or message
+      setResponseType("success");
+      reset();
     } catch (err) {
-      console.error("API Call Failed:", err);
-      setResponseMessage("Network error or failed to connect to the server.");
+      console.error("postSetup Call Failed:", err);
       setResponseType("error");
+    }
+  };
+
+  const handleFetch = async (dustbinId: string) => {
+    setFetchedData(null);
+    setFetchError(null);
+    setDeleteMessage("");
+    setDeleteError(null);
+    try {
+      const response = await fetchSetup(dustbinId);
+      setFetchedData(response);
+    } catch (error) {
+      console.error("Failed to fetch setup:", error);
+      if (axios.isAxiosError(error)) {
+        setFetchError(error.response?.data?.message || "Failed to fetch data.");
+      } else {
+        setFetchError("An unexpected error occurred.");
+      }
+    }
+  };
+
+  const handleDelete = async (dustbinId: string) => {
+    setDeleteMessage("");
+    setDeleteError(null);
+    setFetchedData(null);
+    setFetchError(null);
+    try {
+      const response = await deleteSetup(dustbinId);
+      setDeleteMessage(response); // Assuming it's a string message
+    } catch (error) {
+      console.error("Failed to delete setup:", error);
+      if (axios.isAxiosError(error)) {
+        setDeleteError(
+          error.response?.data?.message || "Failed to delete setup."
+        );
+      } else {
+        setDeleteError("An unexpected error occurred.");
+      }
     }
   };
 
@@ -86,7 +105,7 @@ const AdminPanel: React.FC = () => {
 
   return (
     <div className="flex-1 p-6 md:p-10 bg-gray-100 min-h-screen">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-3xl mx-auto space-y-8">
         <div
           className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} mb-6 text-center md:text-left text-gray-700`}
         >
@@ -195,6 +214,235 @@ const AdminPanel: React.FC = () => {
             </div>
           </div>
         )}
+
+        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+          <div
+            className={`${DEFAULT_ITEM_PROPERTIES.heading.heading3} mb-3 text-gray-700`}
+          >
+            Fetch Dustbin Details
+          </div>
+          <div className="flex space-x-3">
+            <input
+              type="text"
+              placeholder="Enter Dustbin ID to fetch"
+              className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out border-gray-300"
+              id="fetchId"
+            />
+
+            <button
+              onClick={() => {
+                const fetchIdInput = document.getElementById(
+                  "fetchId"
+                ) as HTMLInputElement;
+                if (fetchIdInput?.value) {
+                  handleFetch(fetchIdInput.value);
+                } else {
+                  setFetchError("Please enter a Dustbin ID to fetch.");
+                  setFetchedData(null);
+                  setDeleteMessage("");
+                  setDeleteError(null);
+                }
+              }}
+              className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+            >
+              Fetch
+            </button>
+          </div>
+
+          {fetchError && (
+            <p className="text-red-600 text-sm mt-2" role="alert">
+              {fetchError}
+            </p>
+          )}
+
+          {fetchedData && (
+            <div className="mt-4 p-4 rounded-md bg-gray-50 border border-gray-200">
+              <h4
+                className={`${DEFAULT_ITEM_PROPERTIES.heading.heading4} mb-2 text-gray-800`}
+              >
+                Dustbin Details:
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Dustbin ID:
+                  </strong>{" "}
+                  <span className="text-gray-600">{fetchedData.dustbinId}</span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Location ID:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.locationDataId}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Latitude:
+                  </strong>{" "}
+                  <span className="text-gray-600">{fetchedData.latitude}</span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Longitude:
+                  </strong>{" "}
+                  <span className="text-gray-600">{fetchedData.longitude}</span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Region ID:
+                  </strong>{" "}
+                  <span className="text-gray-600">{fetchedData.regionId}</span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Country:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.countryName}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Region:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.regionName}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    District:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.districtName}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Place:
+                  </strong>{" "}
+                  <span className="text-gray-600">{fetchedData.placeName}</span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Locality:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.localityName}
+                  </span>
+                </div>
+                <div className="py-2 col-span-full">
+                  <strong className="font-semibold text-gray-700">
+                    Address:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.addressName}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Pin Code:
+                  </strong>{" "}
+                  <span className="text-gray-600">{fetchedData.pinCode}</span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Sensor ID:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.sensorDataId}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Weight Data:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.weightData}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Air Quality:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.airQualityData}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Fill Level:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.levelFillData}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Category ID:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.categoryId}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <strong className="font-semibold text-gray-700">
+                    Category Name:
+                  </strong>{" "}
+                  <span className="text-gray-600">
+                    {fetchedData.categoryName}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+          <div
+            className={`${DEFAULT_ITEM_PROPERTIES.heading.heading3} mb-3 text-red-700`}
+          >
+            Delete Dustbin Setup
+          </div>
+          <div className="flex space-x-3">
+            <input
+              type="text"
+              placeholder="Enter Dustbin ID to delete"
+              className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150 ease-in-out border-gray-300"
+              id="deleteId"
+            />
+            <button
+              onClick={() => {
+                const deleteIdInput = document.getElementById(
+                  "deleteId"
+                ) as HTMLInputElement;
+                if (deleteIdInput?.value) {
+                  handleDelete(deleteIdInput.value);
+                } else {
+                  setDeleteError("Please enter a Dustbin ID to delete.");
+                  setDeleteMessage("");
+                  setFetchedData(null);
+                  setFetchError(null);
+                }
+              }}
+              className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+            >
+              Delete
+            </button>
+          </div>
+          {deleteError && (
+            <p className="text-red-600 text-sm mt-2" role="alert">
+              {deleteError}
+            </p>
+          )}
+          {deleteMessage && (
+            <p className="text-green-600 text-sm mt-2" role="alert">
+              {deleteMessage}
+            </p>
+          )}
+        </div>
 
         {isCopied && (
           <div className="fixed bottom-4 right-4 z-50 w-auto max-w-xs sm:max-w-sm">
