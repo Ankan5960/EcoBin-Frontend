@@ -1,4 +1,4 @@
-import { fetchReportData } from "@/api/axios";
+import { fetchReportData } from "@/api/reportApi";
 import type { ReportDataResponse } from "@/types/reportTypes";
 import { useEffect, useState } from "react";
 

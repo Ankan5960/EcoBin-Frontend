@@ -78,7 +78,6 @@ const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[] ) => {
 
 const Map: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const city = useLocationStore((state) => state.city);
   const location = useLocationStore((state) => state.location);
   const {data} = useDustbinData();
 
@@ -96,7 +95,6 @@ const Map: React.FC = () => {
       <h1 className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} " mb-4`}>
         EcoBin Map
       </h1>
-      <h1>Your City: {city || "Loading..."}</h1>
       <h1>
         Your Location: Latitude: {location?.latitude || "Loading..."},
         Longitude: {location?.longitude || "Loading..."}

@@ -1,4 +1,4 @@
-import { fetchDustbinData } from "@/api/axios";
+import { fetchDustbinData } from "@/api/adminSetupApi";
 import useLocationStore from "@/store/useUserLocationStore";
 import type { DustbinData, LocationData } from "@/types/dustbinTypes";
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +9,7 @@ export function useDustbinData() {
   const locationData = useLocationStore((state) => state.location);
 
   const lastLocation = useRef<LocationData | null>(null);
- // const lastZoomLevel = useRef<number | null>(null);
+  // const lastZoomLevel = useRef<number | null>(null);
 
   useEffect(() => {
     const hasLocationChanged =

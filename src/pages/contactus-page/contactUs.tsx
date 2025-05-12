@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Mail, Phone, MapPin, Send } from "lucide-react"; // Example using lucide-react
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
-
-type FormInputs = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-};
+import { ContactUsFromTypes } from "@/types/contactUsFromTypes";
+import { postContactUsFrom } from "@/api/contactUsApi";
+import { ContatactInformation } from "./contactInformationData";
 
 const ContactUs: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,37 +18,33 @@ const ContactUs: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormInputs>();
+  } = useForm<ContactUsFromTypes>();
 
-  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<ContactUsFromTypes> = async (data) => {
     setIsSubmitting(true);
     setSubmitStatus(null);
     setSubmitMessage("");
-    console.log("Form Data Submitted:", data);
+
+    const formData = new FormData();
+    formData.append("Name", data.name);
+    formData.append("Email", data.email);
+    formData.append("Subject", data.subject);
+    formData.append("Message", data.message);
+
+    //console.log("Form Data Submitted:", formData);
 
     try {
-      // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // --- Example API call (replace with your actual fetch/axios call) ---
-      // const response = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data),
-      // });
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok');
-      // }
-      // const result = await response.json();
-      // console.log('API Response:', result);
-      // --- End of Example API call ---
+      const res = await postContactUsFrom(formData);
 
-      // On successful submission
-      setSubmitStatus("success");
-      setSubmitMessage(
-        "Thank you for your message! We will get back to you soon."
-      );
-      reset(); // Clear the form fields
+      if (res) {
+        setSubmitStatus("success");
+        setSubmitMessage(
+          "Thank you for your message! We will get back to you soon."
+        );
+        reset(); 
+      }
     } catch (error) {
       console.error("Submission Error:", error);
       setSubmitStatus("error");
@@ -96,29 +88,26 @@ const ContactUs: React.FC = () => {
             <div className="flex items-center space-x-3 text-gray-700">
               <Phone className="w-5 h-5 text-green-600 flex-shrink-0" />
               <a
-                href="tel:+911234567890"
+                href={`tel:${ContatactInformation.phoneNumber}`}
                 className="hover:text-green-700 transition duration-150 ease-in-out"
               >
-                +91 123 456 7890 {/* Replace with actual phone */}
+                {`${ContatactInformation.phoneNumber}`}
               </a>
             </div>
             {/* Email */}
             <div className="flex items-center space-x-3 text-gray-700">
               <Mail className="w-5 h-5 text-green-600 flex-shrink-0" />
               <a
-                href="mailto:info@ecobin.com"
+                href={`mailto:${ContatactInformation.phoneNumber}`}
                 className="hover:text-green-700 transition duration-150 ease-in-out"
               >
-                info@ecobin.com {/* Replace with actual email */}
+                {`${ContatactInformation.email}`}
               </a>
             </div>
             {/* Address */}
             <div className="flex items-start space-x-3 text-gray-700">
               <MapPin className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
-              <span>
-                123 Green Avenue, Eco City, <br />
-                Environment State, India 110001
-              </span>
+              <span>{`${ContatactInformation.adress}`}</span>
             </div>
             <div className="mt-6 pt-6 border-t border-gray-200">
               <h3 className="text-lg font-medium text-gray-700 mb-3">
@@ -127,7 +116,7 @@ const ContactUs: React.FC = () => {
               {/* Replace with an actual map embed (e.g., Google Maps iframe) or a static image */}
               <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-md overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5661.026367503827!2d88.47311216565487!3d22.579637531094555!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a02753218640eb5%3A0x6ac9709df3ff6bf!2sNKDA%20Administrative%20Building!5e1!3m2!1sen!2sin!4v1746184763093!5m2!1sen!2sin"
+                  src={`${ContatactInformation.mapSrc}`}
                   width="600"
                   height="350"
                   style={{ border: 0 }}
@@ -162,7 +151,7 @@ const ContactUs: React.FC = () => {
                   className={`w-full p-2.5 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out ${
                     errors.name ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                 />
                 {errors.name && (
                   <p className="text-red-600 text-xs mt-1">
@@ -192,7 +181,7 @@ const ContactUs: React.FC = () => {
                   className={`w-full p-2.5 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out ${
                     errors.email ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="you@example.com"
+                  placeholder="your@gmail.com"
                 />
                 {errors.email && (
                   <p className="text-red-600 text-xs mt-1">

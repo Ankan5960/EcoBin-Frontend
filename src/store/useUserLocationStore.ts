@@ -3,26 +3,23 @@ import axios from 'axios'
 import { LocationData } from '@/types/dustbinTypes'
 
 interface LocationState {
-  city: string | null
   location: LocationData | null
   loading: boolean
   error: string | null
-  fetchCityFromIP: () => Promise<void>
+  fetchLocationFromIP: () => Promise<void>
   fetchGeoLocation: () => Promise<void>
   fetchLocation: () => Promise<void> // Main function to call
 }
 
 const useLocationStore = create<LocationState>((set, get) => ({
-  city: null,
   location: null,
   loading: false,
   error: null,
 
-  fetchCityFromIP: async () => {
+  fetchLocationFromIP: async () => {
     try {
       const res = await axios.get('https://ipapi.co/json/')
       set({
-        city: res.data.city,
         location: {
           latitude: res.data.latitude.toString(),
           longitude: res.data.longitude.toString(),
@@ -71,7 +68,7 @@ const useLocationStore = create<LocationState>((set, get) => ({
       await get().fetchGeoLocation()
     } catch {
       // If geolocation fails, fallback to IP
-      await get().fetchCityFromIP()
+      await get().fetchLocationFromIP()
     }
 
     set({ loading: false })
