@@ -30,4 +30,5 @@ export interface DustbinData {
   sensorData: SensorData;
   category: CategoryEntity;
   distanceFromUser: string;
+  isDangrouse: boolean | null;
 }

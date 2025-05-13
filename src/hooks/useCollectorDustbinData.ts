@@ -1,15 +1,14 @@
-import { fetchDustbinData } from "@/api/adminSetupApi";
+import { fetchCollectorDustbinData } from "@/api/dustbinDataApi";
 import userLocationStore from "@/store/userLocationStore";
 import type { DustbinData, LocationData } from "@/types/dustbinTypes";
 import { useEffect, useRef, useState } from "react";
 
-export function useDustbinData() {
+export function useCollectorDustbinData(localityName: string) {
   const [data, setData] = useState<DustbinData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const locationData = userLocationStore((state) => state.location);
 
   const lastLocation = useRef<LocationData | null>(null);
-  // const lastZoomLevel = useRef<number | null>(null);
 
   useEffect(() => {
     const hasLocationChanged =
@@ -21,7 +20,8 @@ export function useDustbinData() {
     const loadData = async () => {
       setLoading(true);
       try {
-        const res = await fetchDustbinData(
+        const res = await fetchCollectorDustbinData(
+          localityName,
           locationData?.latitude || "",
           locationData?.longitude || ""
         );
@@ -30,7 +30,6 @@ export function useDustbinData() {
           latitude: locationData?.latitude || "",
           longitude: locationData?.longitude || "",
         };
-        //lastZoomLevel.current = zoomLevel;
       } catch (err) {
         console.error("Error fetching dustbin data", err);
       } finally {
@@ -39,7 +38,7 @@ export function useDustbinData() {
     };
 
     loadData();
-  }, [locationData?.latitude, locationData?.longitude, data]);
+  }, [localityName,locationData?.latitude, locationData?.longitude, data]);
 
   return { data, loading };
 }

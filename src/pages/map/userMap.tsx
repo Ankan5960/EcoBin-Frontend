@@ -10,7 +10,7 @@ import type {
   SensorData,
 } from "@/types/dustbinTypes";
 import userLocationStore from "@/store/userLocationStore";
-import { useDustbinData } from "@/hooks/useDustbinData";
+import { useUserDustbinData } from "@/hooks/useUserDustbinData";
 
 const generatePopupContent = (
   sensorData: SensorData,
@@ -76,10 +76,10 @@ const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[]) => {
   }, 5000);
 };
 
-const Map: React.FC = () => {
+const UserMap: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const location = userLocationStore((state) => state.location);
-  const { data } = useDustbinData();
+  const { data } = useUserDustbinData();
 
   useEffect(() => {
     const map = mapBoxConfiguration(mapContainerRef, location);
@@ -109,4 +109,4 @@ const Map: React.FC = () => {
   );
 };
 
-export default Map;
+export default UserMap;

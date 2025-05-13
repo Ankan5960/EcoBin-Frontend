@@ -1,25 +1,6 @@
 import axios from "axios";
-import type { DustbinData } from "@/types/dustbinTypes";
 import { AdminFormInputs } from "@/types/adminApiTypes";
 import { DustbinDetailsDataTypes } from "@/types/dustbinDetailsDataTypes";
-
-export const fetchDustbinData = async (
-  latitude: string | number,
-  longitude: string | number
-): Promise<DustbinData[]> => {
-  const response = await axios.get<DustbinData[]>(
-    `${
-      import.meta.env.VITE_ECOBIN_USER_DATA_SERVICE
-    }/api/DustbinData/get-dustbin-data`,
-    {
-      params: {
-        Latitude: latitude,
-        Longitude: longitude,
-      },
-    }
-  );
-  return response.data;
-};
 
 export const postSetup = async (data: AdminFormInputs): Promise<string> => {
   const res = await axios.post(
