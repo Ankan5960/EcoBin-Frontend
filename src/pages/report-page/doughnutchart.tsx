@@ -4,7 +4,9 @@ import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const DoughnutChart: React.FC<DustbinCategoryList> = ({dustbinCategoryList}) => {
+export const DoughnutChart: React.FC<DustbinCategoryList> = ({
+  dustbinCategoryList,
+}) => {
   const data = {
     labels: dustbinCategoryList.map((category) => category.categoryName),
     datasets: [
@@ -33,4 +35,4 @@ export const DoughnutChart: React.FC<DustbinCategoryList> = ({dustbinCategoryLis
   };
 
   return <Doughnut data={data} />;
-}
+};

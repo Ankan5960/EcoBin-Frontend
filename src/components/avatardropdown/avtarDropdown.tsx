@@ -1,10 +1,4 @@
-import {
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Settings,
-  User,
-} from "lucide-react";
+import { Keyboard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -37,7 +31,6 @@ export function AvtarDropdown() {
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            
             <Settings />
             <span>Settings</span>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>

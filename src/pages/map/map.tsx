@@ -9,7 +9,7 @@ import type {
   LocationData,
   SensorData,
 } from "@/types/dustbinTypes";
-import useLocationStore from "@/store/useUserLocationStore";
+import userLocationStore from "@/store/userLocationStore";
 import { useDustbinData } from "@/hooks/useDustbinData";
 
 const generatePopupContent = (
@@ -50,36 +50,36 @@ const mapBoxConfiguration = (
   return map;
 };
 
-const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[] ) => {
-        const popups: mapboxgl.Popup[] = [];
+const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[]) => {
+  const popups: mapboxgl.Popup[] = [];
 
-        datas.forEach((data: DustbinData) => {
-          const popup = new mapboxgl.Popup().setHTML(
-            generatePopupContent(data.sensorData, data.category)
-          );
+  datas.forEach((data: DustbinData) => {
+    const popup = new mapboxgl.Popup().setHTML(
+      generatePopupContent(data.sensorData, data.category)
+    );
 
-          new mapboxgl.Marker({
-            color: "red",
-          })
-            .setLngLat([
-              Number(data.location.longitude),
-              Number(data.location.latitude),
-            ])
-            .setPopup(popup)
-            .addTo(map);
+    new mapboxgl.Marker({
+      color: "red",
+    })
+      .setLngLat([
+        Number(data.location.longitude),
+        Number(data.location.latitude),
+      ])
+      .setPopup(popup)
+      .addTo(map);
 
-          popups.push(popup);
-        });
+    popups.push(popup);
+  });
 
-        setTimeout(() => {
-          popups.forEach((p) => p.remove());
-        }, 5000);
+  setTimeout(() => {
+    popups.forEach((p) => p.remove());
+  }, 5000);
 };
 
 const Map: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const location = useLocationStore((state) => state.location);
-  const {data} = useDustbinData();
+  const location = userLocationStore((state) => state.location);
+  const { data } = useDustbinData();
 
   useEffect(() => {
     const map = mapBoxConfiguration(mapContainerRef, location);

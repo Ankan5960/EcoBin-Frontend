@@ -9,4 +9,3 @@ export const fetchReportData = async (): Promise<ReportDataResponse> => {
   );
   return response.data;
 };
-

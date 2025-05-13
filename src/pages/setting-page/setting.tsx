@@ -40,10 +40,17 @@ const Settings: React.FC = () => {
     }, 1000); // Simulate loading time
   }, []);
 
-  const handleInputChange = (section: string, field: string, value: unknown|null, binId?: string) => {
+  const handleInputChange = (
+    section: string,
+    field: string,
+    value: unknown | null,
+    binId?: string
+  ) => {
     // Update the relevant state based on the input change
     if (section === "user") {
-      setUserSettings((prevSettings) => ({ ...prevSettings, [field]: value } as UserSettings));
+      setUserSettings(
+        (prevSettings) => ({ ...prevSettings, [field]: value } as UserSettings)
+      );
     } else if (section === "bin" && binId && binSettings) {
       setBinSettings((prevSettings) => ({
         ...prevSettings,
@@ -75,10 +82,15 @@ const Settings: React.FC = () => {
 
       {userSettings && (
         <div className="mt-6">
-          <h2 className={DEFAULT_ITEM_PROPERTIES.heading.heading4}>User Profile</h2>
+          <h2 className={DEFAULT_ITEM_PROPERTIES.heading.heading4}>
+            User Profile
+          </h2>
           <div className="mt-2 space-y-4">
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="displayName">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="displayName"
+              >
                 Display Name
               </label>
               <input
@@ -86,11 +98,16 @@ const Settings: React.FC = () => {
                 id="displayName"
                 type="text"
                 value={userSettings.displayName}
-                onChange={(e) => handleInputChange("user", "displayName", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("user", "displayName", e.target.value)
+                }
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="email"
+              >
                 Email Address
               </label>
               <input
@@ -110,45 +127,65 @@ const Settings: React.FC = () => {
                 type="checkbox"
                 className="form-checkbox h-5 w-5 text-indigo-600"
                 checked={userSettings.binFullAlerts}
-                onChange={(e) => handleInputChange("user", "binFullAlerts", e.target.checked)}
+                onChange={(e) =>
+                  handleInputChange("user", "binFullAlerts", e.target.checked)
+                }
               />
             </div>
           </div>
         </div>
       )}
 
-      {binSettings && Object.entries(binSettings).map(([binId, settings]) => (
-        <div key={binId} className="mt-6">
-          <h2 className={DEFAULT_ITEM_PROPERTIES.heading.heading4}>{settings.name} Configuration</h2>
-          <div className="mt-2 space-y-4">
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`binName-${binId}`}>
-                Bin Name
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id={`binName-${binId}`}
-                type="text"
-                value={settings.name}
-                onChange={(e) => handleInputChange("bin", "name", e.target.value, binId)}
-              />
+      {binSettings &&
+        Object.entries(binSettings).map(([binId, settings]) => (
+          <div key={binId} className="mt-6">
+            <h2 className={DEFAULT_ITEM_PROPERTIES.heading.heading4}>
+              {settings.name} Configuration
+            </h2>
+            <div className="mt-2 space-y-4">
+              <div>
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor={`binName-${binId}`}
+                >
+                  Bin Name
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id={`binName-${binId}`}
+                  type="text"
+                  value={settings.name}
+                  onChange={(e) =>
+                    handleInputChange("bin", "name", e.target.value, binId)
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor={`binCapacity-${binId}`}
+                >
+                  Capacity (e.g., in liters)
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id={`binCapacity-${binId}`}
+                  type="number"
+                  value={settings.capacity}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "bin",
+                      "capacity",
+                      parseInt(e.target.value),
+                      binId
+                    )
+                  }
+                />
+              </div>
+              {/* Add more bin-specific settings here */}
             </div>
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`binCapacity-${binId}`}>
-                Capacity (e.g., in liters)
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id={`binCapacity-${binId}`}
-                type="number"
-                value={settings.capacity}
-                onChange={(e) => handleInputChange("bin", "capacity", parseInt(e.target.value), binId)}
-              />
-            </div>
-            {/* Add more bin-specific settings here */}
           </div>
-        </div>
-      ))}
+        ))}
 
       <div className="mt-8">
         <button

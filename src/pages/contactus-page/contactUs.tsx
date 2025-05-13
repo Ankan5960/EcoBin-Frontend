@@ -43,7 +43,7 @@ const ContactUs: React.FC = () => {
         setSubmitMessage(
           "Thank you for your message! We will get back to you soon."
         );
-        reset(); 
+        reset();
       }
     } catch (error) {
       console.error("Submission Error:", error);

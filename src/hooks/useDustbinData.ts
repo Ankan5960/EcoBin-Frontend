@@ -1,12 +1,12 @@
 import { fetchDustbinData } from "@/api/adminSetupApi";
-import useLocationStore from "@/store/useUserLocationStore";
+import userLocationStore from "@/store/userLocationStore";
 import type { DustbinData, LocationData } from "@/types/dustbinTypes";
 import { useEffect, useRef, useState } from "react";
 
 export function useDustbinData() {
   const [data, setData] = useState<DustbinData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const locationData = useLocationStore((state) => state.location);
+  const locationData = userLocationStore((state) => state.location);
 
   const lastLocation = useRef<LocationData | null>(null);
   // const lastZoomLevel = useRef<number | null>(null);

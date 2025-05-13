@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import useLocationStore from "@/store/useUserLocationStore";
+import userLocationStore from "@/store/userLocationStore";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const { fetchGeoLocation, loading, location } = useLocationStore();
+  const { fetchGeoLocation, loading, location } = userLocationStore();
 
   useEffect(() => {
     fetchGeoLocation();

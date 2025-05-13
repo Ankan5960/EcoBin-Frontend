@@ -20,7 +20,7 @@ export const useReportData = () => {
     };
 
     loadData();
-  },[]);
+  }, []);
 
-  return {data, loading};
+  return { data, loading };
 };

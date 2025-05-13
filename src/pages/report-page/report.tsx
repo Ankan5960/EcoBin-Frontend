@@ -6,13 +6,6 @@ import { useReportData } from "@/hooks/useReportData";
 import { calculateEnvironmentalImpact } from "@/utility/environmental";
 import { downloadAsPdf } from "@/utility/downloadAsPdf";
 
-const summaryData = {
-  totalCollected: 12580, // kg
-  recyclingRate: 65, // percentage
-  collectionsToday: 45,
-  activeBins: 180,
-};
-
 const statuses = [
   { statusName: "High Risk", statusValue: 20 }, // red-500
   { statusName: "Moderate Risk", statusValue: 30 }, // amber-500
@@ -55,7 +48,7 @@ const Report: React.FC = () => {
             <div>
               {/* Placeholder for filters */}
               <button
-              type="button"
+                type="button"
                 onClick={() => handleDownloadReport("Full Summary")}
                 className="inline-flex items-center px-4 py-2 border border-green-600 rounded-md shadow-sm text-sm font-medium text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
               >
@@ -95,7 +88,7 @@ const Report: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-500">Recycling Rate</p>
                   <p className="text-2xl font-semibold text-gray-800">
-                    {summaryData.recyclingRate}%
+                    {/* {summaryData.recyclingRate}% */}
                   </p>
                 </div>
               </div>
@@ -151,7 +144,7 @@ const Report: React.FC = () => {
                   Waste Types
                 </span>
                 <button
-                type="button"
+                  type="button"
                   onClick={() => handleDownloadReport("Waste Breakdown")}
                   className="text-xs text-green-600 hover:underline"
                 >
@@ -174,7 +167,7 @@ const Report: React.FC = () => {
                   Collection Trends (Last 7 Days)
                 </span>
                 <button
-                type="button"
+                  type="button"
                   onClick={() => handleDownloadReport("Collection Trends")}
                   className="text-xs text-green-600 hover:underline"
                 >
@@ -208,7 +201,7 @@ const Report: React.FC = () => {
                     CO₂ Emission Saved (Est.)
                   </p>
                   <p className="text-xl font-semibold text-green-800">
-                  {Number.isNaN(co2EmissionSaved) ? "0" : co2EmissionSaved} kg
+                    {Number.isNaN(co2EmissionSaved) ? "0" : co2EmissionSaved} kg
                   </p>
                 </div>
                 <div className="bg-lime-50 p-4 rounded-md border border-lime-200">
@@ -216,7 +209,7 @@ const Report: React.FC = () => {
                     Trees Saved (Equivalent)
                   </p>
                   <p className="text-xl font-semibold text-lime-800">
-                  {Number.isNaN(treesSaved) ? "0" : treesSaved} kg
+                    {Number.isNaN(treesSaved) ? "0" : treesSaved}
                   </p>
                 </div>
               </div>
