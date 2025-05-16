@@ -30,13 +30,14 @@ const generatePopupContent = (
 const mapBoxConfiguration = (
   mapContainerRef: React.RefObject<HTMLDivElement | null>,
   userLocation: LocationData | null,
-  mapboxApiKey: string | null
+  //mapboxApiKey: string | null
 ) => {
   if (!mapContainerRef.current) {
     throw new Error("Map container not ready");
   }
 
-  mapboxgl.accessToken = mapboxApiKey;
+  // mapboxgl.accessToken = mapboxApiKey;
+  mapboxgl.accessToken= import.meta.env.VITE_MAPBOX_ACCESS_TOKEN 
 
   const map = new mapboxgl.Map({
     container: mapContainerRef.current!,
@@ -96,7 +97,7 @@ const UserMap: React.FC = () => {
   useEffect(() => {
     if (!mapboxApiKey || !location) return;
 
-    const map = mapBoxConfiguration(mapContainerRef, location, mapboxApiKey);
+    const map = mapBoxConfiguration(mapContainerRef, location);
     if (data) {
       handleMapLoad(map, data);
     }
