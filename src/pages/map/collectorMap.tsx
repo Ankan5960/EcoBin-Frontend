@@ -81,7 +81,6 @@ const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[]) => {
     popups.push(popup);
   });
 
-  // Optional auto-hide
   setTimeout(() => {
     popups.forEach((p) => p.remove());
   }, 5000);

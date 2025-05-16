@@ -10,12 +10,12 @@ import Login from "./pages/login-page/login";
 import Root from "./pages/root/root";
 import Signup from "./pages/signup-page/signup";
 import AdminPanel from "./pages/admin/admin";
-//import UserMap from "./pages/map/map";
 import Settings from "./pages/setting-page/setting";
 import Report from "./pages/report-page/report";
 import ContactUs from "./pages/contactus-page/contactUs";
 import AppLayout from "./components/layout/AppLayout";
-import CollectorMap from "./pages/map/collectorMap";
+import UserMap from "./pages/map/userMap";
+//import CollectorMap from "./pages/map/collectorMap";
 
 const routes: RouteObject[] = [
   {
@@ -31,14 +31,14 @@ const routes: RouteObject[] = [
         path: "dashboard",
         element: <Dashboard />,
         children: [
-          // {
-          //   index: true,
-          //   element: <UserMap />,
-          // },
           {
             index: true,
-            element: <CollectorMap />,
+            element: <UserMap />,
           },
+          // {
+          //   index: true,
+          //   element: <CollectorMap />,
+          // },
           {
             path: "admin",
             element: <AdminPanel />,

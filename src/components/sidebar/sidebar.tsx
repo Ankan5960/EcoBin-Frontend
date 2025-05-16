@@ -1,9 +1,11 @@
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { SquareX } from "lucide-react";
 import { useToggleSidebar } from "@/hooks/useToggleSidebar";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const { isOpen, toggleSidebar } = useToggleSidebar();
+  const navigate = useNavigate();
 
   return (
     <aside
@@ -14,38 +16,38 @@ const Sidebar = () => {
       } fixed lg:static inset-y-0 left-0 lg:flex flex-col z-50`}
     >
       <div className="lg:hidden">
-        <SquareX size={24} onClick={() => toggleSidebar()} />
+        <SquareX size={24} onClick={toggleSidebar} />
       </div>
-      <a
-        href="/dashboard"
-        className="block py-2 px-4 rounded hover:bg-gray-700"
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
         Dashboard
-      </a>
-      <a
-        href="/dashboard/admin"
-        className="block py-2 px-4 rounded hover:bg-gray-700"
+      </button>
+      <button
+        onClick={() => navigate("/dashboard/admin")}
+        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
         Admin Panel
-      </a>
-      <a
-        href="/dashboard/settings"
-        className="block py-2 px-4 rounded hover:bg-gray-700"
+      </button>
+      <button
+        onClick={() => navigate("/dashboard/settings")}
+        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
         Settings
-      </a>
-      <a
-        href="/dashboard/contactus"
-        className="block py-2 px-4 rounded hover:bg-gray-700"
+      </button>
+      <button
+        onClick={() => navigate("/dashboard/contactus")}
+        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
         Contact us
-      </a>
-      <a
-        href="/dashboard/report"
-        className="block py-2 px-4 rounded hover:bg-gray-700"
+      </button>
+      <button
+        onClick={() => navigate("/dashboard/report")}
+        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
         Report
-      </a>
+      </button>
     </aside>
   );
 };
