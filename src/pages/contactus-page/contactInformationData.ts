@@ -1,6 +1,6 @@
 export const ContatactInformation = {
   phoneNumber: "+91 xxxxxxxxxx",
-  email: "EcoBin@gmail.com",
+  email: "ecobin2030@gmail.com",
   adress:
     "DG Block(Newtown), Action Area I, Newtown, New Town, West Bengal 700156",
   mapSrc:

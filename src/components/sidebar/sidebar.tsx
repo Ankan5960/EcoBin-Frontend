@@ -28,6 +28,12 @@ const Sidebar = () => {
         onClick={() => navigate("/dashboard/admin")}
         className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
+        Admin Setup
+      </button>
+      <button
+        onClick={() => navigate("/dashboard/report")}
+        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
+      >
         Admin Panel
       </button>
       <button
@@ -41,12 +47,6 @@ const Sidebar = () => {
         className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
       >
         Contact us
-      </button>
-      <button
-        onClick={() => navigate("/dashboard/report")}
-        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
-      >
-        Report
       </button>
     </aside>
   );

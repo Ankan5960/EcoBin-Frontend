@@ -15,7 +15,7 @@ import Report from "./pages/report-page/report";
 import ContactUs from "./pages/contactus-page/contactUs";
 import AppLayout from "./components/layout/AppLayout";
 import UserMap from "./pages/map/userMap";
-//import CollectorMap from "./pages/map/collectorMap";
+import CollectorMap from "./pages/map/collectorMap";
 
 const routes: RouteObject[] = [
   {
@@ -35,10 +35,10 @@ const routes: RouteObject[] = [
             index: true,
             element: <UserMap />,
           },
-          // {
-          //   index: true,
-          //   element: <CollectorMap />,
-          // },
+          {
+            path: "collectormap",
+            element: <CollectorMap />,
+          },
           {
             path: "admin",
             element: <AdminPanel />,

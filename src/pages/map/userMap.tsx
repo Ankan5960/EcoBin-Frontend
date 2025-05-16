@@ -11,6 +11,7 @@ import type {
 } from "@/types/dustbinTypes";
 import userLocationStore from "@/store/userLocationStore";
 import { useUserDustbinData } from "@/hooks/useUserDustbinData";
+import mapBoxApiKeyStore from "@/store/mapBoxApiKeyStore";
 
 const generatePopupContent = (
   sensorData: SensorData,
@@ -28,13 +29,14 @@ const generatePopupContent = (
 
 const mapBoxConfiguration = (
   mapContainerRef: React.RefObject<HTMLDivElement | null>,
-  userLocation: LocationData | null
+  userLocation: LocationData | null,
+  mapboxApiKey: string | null
 ) => {
   if (!mapContainerRef.current) {
     throw new Error("Map container not ready");
   }
 
-  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+  mapboxgl.accessToken = mapboxApiKey;
 
   const map = new mapboxgl.Map({
     container: mapContainerRef.current!,
@@ -80,15 +82,27 @@ const UserMap: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const location = userLocationStore((state) => state.location);
   const { data } = useUserDustbinData();
+  const mapboxApiKey = mapBoxApiKeyStore((state) => state.mapBoxApiKey);
+  const fetchMapBoxApiKey = mapBoxApiKeyStore(
+    (state) => state.fetchMapBoxApiKey
+  );
 
   useEffect(() => {
-    const map = mapBoxConfiguration(mapContainerRef, location);
+    if (!mapboxApiKey) {
+      fetchMapBoxApiKey();
+    }
+  }, [fetchMapBoxApiKey, mapboxApiKey]);
+
+  useEffect(() => {
+    if (!mapboxApiKey || !location) return;
+
+    const map = mapBoxConfiguration(mapContainerRef, location, mapboxApiKey);
     if (data) {
       handleMapLoad(map, data);
     }
 
     return () => map.remove();
-  }, [data, location]);
+  }, [data, location, mapboxApiKey]);
 
   return (
     <main className="flex-1 p-6 bg-gray-100 overflow-hidden">
@@ -97,7 +111,7 @@ const UserMap: React.FC = () => {
       </h1>
       <h1>
         Your Location: Latitude: {location?.latitude || "Loading..."},
-        Longitude: {location?.longitude || "Loading..."}
+        Longitude: {location?.longitude || "Loading..."},
       </h1>
       <div className="relative">
         <div
