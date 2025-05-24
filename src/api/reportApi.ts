@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ReportDataResponse } from "@/types/reportTypes";
+import type { ReportDataResponse } from "@/models/report-model";
 
 export const fetchReportData = async (): Promise<ReportDataResponse> => {
   const response = await axios.get<ReportDataResponse>(

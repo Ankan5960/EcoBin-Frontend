@@ -8,7 +8,7 @@ import type {
   DustbinData,
   LocationData,
   SensorData,
-} from "@/types/dustbinTypes";
+} from "@/models/dustbin-model";
 import userLocationStore from "@/store/userLocationStore";
 import { useCollectorDustbinData } from "@/hooks/useCollectorDustbinData";
 import { fetchCollectRoute } from "@/api/dustbinDataApi";
@@ -36,7 +36,7 @@ const generatePopupContent = (
 
 const mapBoxConfiguration = (
   mapContainerRef: React.RefObject<HTMLDivElement | null>,
-  userLocation: LocationData | null,
+  userLocation: LocationData | null
   //mapboxApiKey: string | null
 ): mapboxgl.Map => {
   if (!mapContainerRef.current) {
@@ -44,8 +44,7 @@ const mapBoxConfiguration = (
   }
 
   //mapboxgl.accessToken = mapboxApiKey;
-    mapboxgl.accessToken= import.meta.env.VITE_MAPBOX_ACCESS_TOKEN 
-
+  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   const map = new mapboxgl.Map({
     container: mapContainerRef.current,
@@ -72,7 +71,7 @@ const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[]) => {
       generatePopupContent(data.isDangrouse, data.sensorData, data.category)
     );
 
-    const markerColor=data.isDangrouse?"red":"blue";
+    const markerColor = data.isDangrouse ? "red" : "blue";
 
     new mapboxgl.Marker({ color: markerColor })
       .setLngLat([
@@ -212,7 +211,7 @@ const CollectorMap: React.FC = () => {
   }, [fetchMapBoxApiKey, mapboxApiKey]);
 
   useEffect(() => {
-     if (!mapboxApiKey || !location) return;
+    if (!mapboxApiKey || !location) return;
 
     const initializedMap = mapBoxConfiguration(mapContainerRef, location);
     setMap(initializedMap);

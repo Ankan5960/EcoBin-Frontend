@@ -1,4 +1,4 @@
-import { DustbinData } from "@/types/dustbinTypes";
+import { DustbinData } from "@/models/dustbin-model";
 import React, { useEffect } from "react";
 
 interface DustbinFetcherProps {

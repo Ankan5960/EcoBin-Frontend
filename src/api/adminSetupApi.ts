@@ -1,6 +1,6 @@
 import axios from "axios";
-import { AdminFormInputs } from "@/types/adminApiTypes";
-import { DustbinDetailsDataTypes } from "@/types/dustbinDetailsDataTypes";
+import { AdminFormInputs } from "@/models/admin-api-models";
+import { DustbinDetailsDataModel } from "@/models/dustbin-details-data-model";
 
 export const postSetup = async (data: AdminFormInputs): Promise<string> => {
   const res = await axios.post(
@@ -17,8 +17,8 @@ export const postSetup = async (data: AdminFormInputs): Promise<string> => {
 
 export const fetchSetup = async (
   DustbinId: string
-): Promise<DustbinDetailsDataTypes> => {
-  const res = await axios.get<DustbinDetailsDataTypes>(
+): Promise<DustbinDetailsDataModel> => {
+  const res = await axios.get<DustbinDetailsDataModel>(
     `${
       import.meta.env.VITE_ECOBIN_SENSOR_DATA_SERVICE
     }/api/AdminSetup/getsetup`,

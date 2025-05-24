@@ -8,7 +8,7 @@ import type {
   DustbinData,
   LocationData,
   SensorData,
-} from "@/types/dustbinTypes";
+} from "@/models/dustbin-model";
 import userLocationStore from "@/store/userLocationStore";
 import { useUserDustbinData } from "@/hooks/useUserDustbinData";
 import mapBoxApiKeyStore from "@/store/mapBoxApiKeyStore";
@@ -29,7 +29,7 @@ const generatePopupContent = (
 
 const mapBoxConfiguration = (
   mapContainerRef: React.RefObject<HTMLDivElement | null>,
-  userLocation: LocationData | null,
+  userLocation: LocationData | null
   //mapboxApiKey: string | null
 ) => {
   if (!mapContainerRef.current) {
@@ -37,7 +37,7 @@ const mapBoxConfiguration = (
   }
 
   // mapboxgl.accessToken = mapboxApiKey;
-  mapboxgl.accessToken= import.meta.env.VITE_MAPBOX_ACCESS_TOKEN 
+  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   const map = new mapboxgl.Map({
     container: mapContainerRef.current!,

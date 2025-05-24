@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import { LocationData } from "@/types/dustbinTypes";
+import { LocationData } from "@/models/dustbin-model";
 
 interface LocationState {
   location: LocationData | null;

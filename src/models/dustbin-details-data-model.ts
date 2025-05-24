@@ -1,4 +1,4 @@
-export interface DustbinDetailsDataTypes {
+export interface DustbinDetailsDataModel {
   dustbinId: string;
   locationDataId: string;
   latitude: string;

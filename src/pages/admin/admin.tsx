@@ -3,8 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { deleteSetup, fetchSetup, postSetup } from "@/api/adminSetupApi";
-import { AdminFormInputs } from "@/types/adminApiTypes";
-import { DustbinDetailsDataTypes } from "@/types/dustbinDetailsDataTypes";
+import { AdminFormInputs } from "@/models/admin-api-models";
+import { DustbinDetailsDataModel } from "@/models/dustbin-details-data-model";
 import axios from "axios";
 
 const AdminPanel: React.FC = () => {
@@ -21,7 +21,7 @@ const AdminPanel: React.FC = () => {
   );
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [fetchedData, setFetchedData] =
-    useState<DustbinDetailsDataTypes | null>(null);
+    useState<DustbinDetailsDataModel | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<string>("");
   const [deleteError, setDeleteError] = useState<string | null>(null);

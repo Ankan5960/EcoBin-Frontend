@@ -1,5 +1,5 @@
 import { fetchReportData } from "@/api/reportApi";
-import type { ReportDataResponse } from "@/types/reportTypes";
+import type { ReportDataResponse } from "@/models/report-model";
 import { useEffect, useState } from "react";
 
 export const useReportData = () => {

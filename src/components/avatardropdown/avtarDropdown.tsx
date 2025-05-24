@@ -1,5 +1,4 @@
 import { Keyboard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +10,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
+import { LocalStorage } from "@/storage/LocalStorage";
+import { IUserLoginResponse } from "@/pages/login-page/login.model";
 
 export function AvtarDropdown() {
+  const navigate = useNavigate();
+  const userLocalStorage = new LocalStorage<IUserLoginResponse>();
+
+  const handleLogOut = () => {
+    // Clear tokens or session info
+    userLocalStorage.remove("user");
+    // Redirect to login or home page
+    navigate("/login");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -47,7 +58,7 @@ export function AvtarDropdown() {
           <span>Support</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogOut}>
           <LogOut />
           <span>Log out</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

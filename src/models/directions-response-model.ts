@@ -1,4 +1,4 @@
-export interface DirectionsResponseDto {
+export interface DirectionsResponseModel {
   routes: Route[];
   waypoints: Waypoint[];
   code: string;

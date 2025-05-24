@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Mail, Phone, MapPin, Send } from "lucide-react"; // Example using lucide-react
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
-import { ContactUsFromTypes } from "@/types/contactUsFromTypes";
-import { postContactUsFrom } from "@/api/contactUsApi";
-import { ContatactInformation } from "./contactInformationData";
+import { IContactUsFromRequestModel } from "@/pages/contactus-page/contact-us-from-model";
+import { ContatactInformation } from "./contact-information-data";
+import { ContactUsService } from "./contact-us.service";
 
 const ContactUs: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -12,48 +12,36 @@ const ContactUs: React.FC = () => {
     null
   );
   const [submitMessage, setSubmitMessage] = useState("");
-
+  const ContactUsFrom = new ContactUsService();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ContactUsFromTypes>();
+  } = useForm<IContactUsFromRequestModel>();
 
-  const onSubmit: SubmitHandler<ContactUsFromTypes> = async (data) => {
+  const handleContactUs = async (data: IContactUsFromRequestModel) => {
     setIsSubmitting(true);
     setSubmitStatus(null);
     setSubmitMessage("");
+    const response = await ContactUsFrom.postContactUs(data);
 
-    const formData = new FormData();
-    formData.append("Name", data.name);
-    formData.append("Email", data.email);
-    formData.append("Subject", data.subject);
-    formData.append("Message", data.message);
-
-    //console.log("Form Data Submitted:", formData);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const res = await postContactUsFrom(formData);
-
-      if (res) {
-        setSubmitStatus("success");
-        setSubmitMessage(
-          "Thank you for your message! We will get back to you soon."
-        );
-        reset();
-      }
-    } catch (error) {
-      console.error("Submission Error:", error);
+    if (response.data?.isSuccess) {
+      console.log("submited");
+      setSubmitStatus("success");
+      setSubmitMessage(
+        "Thank you for your message! We will get back to you soon."
+      );
+      reset();
+    } else {
+      console.error("Submission Error:", response.errorData);
       setSubmitStatus("error");
       setSubmitMessage(
         "Sorry, there was an error sending your message. Please try again later."
       );
-    } finally {
-      setIsSubmitting(false);
     }
+
+     setIsSubmitting(false);
   };
 
   return (
@@ -135,7 +123,7 @@ const ContactUs: React.FC = () => {
             >
               Send us a Message
             </h2>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={handleSubmit(handleContactUs)} className="space-y-5">
               {/* Name Field */}
               <div>
                 <label

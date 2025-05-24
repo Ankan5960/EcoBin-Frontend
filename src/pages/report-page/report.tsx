@@ -2,7 +2,10 @@ import { BarChart3, PieChart, Trash2, Leaf, Download } from "lucide-react"; // E
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { DoughnutChart } from "./doughnutchart";
 import { BarChart } from "./barchart";
-import { useReportData } from "@/hooks/useReportData";
+
+import { ReportDataService } from "./report.service";
+import { useEffect, useState } from "react";
+import { ReportDataResponse } from "@/models/report-model";
 import { calculateEnvironmentalImpact } from "@/utility/environmental";
 import { downloadAsPdf } from "@/utility/downloadAsPdf";
 
@@ -13,18 +16,42 @@ const statuses = [
 ];
 
 const Report: React.FC = () => {
-  const { data } = useReportData();
+  const [reportData, setReportData] = useState<ReportDataResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  let entries: { categoryName: string; count: number }[] | undefined;
+  useEffect(() => {
+    const fetchData = async () => {
+      const service = new ReportDataService();
+      const data = await service.fetchReportData();
+      if ("totalWeightData" in data) {
+        setReportData(data);
+      }
+      setLoading(false);
+    };
 
-  if (data?.categories) {
-    entries = Object.entries(data.categories).map(([key, value]) => ({
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="p-10 text-center">Loading report data...</div>;
+  }
+
+  if (!reportData) {
+    return (
+      <div className="p-10 text-center text-red-500">
+        Failed to load report data.
+      </div>
+    );
+  }
+
+  const entries = Object.entries(reportData.categories || {}).map(
+    ([key, value]) => ({
       categoryName: key,
       count: value,
-    }));
-  }
+    })
+  );
   const { co2EmissionSaved, treesSaved } = calculateEnvironmentalImpact(
-    Number(data?.totalAirQualityData)
+    Number(reportData?.totalAirQualityData)
   );
 
   const handleDownloadReport = async (reportType: string) => {
@@ -76,7 +103,7 @@ const Report: React.FC = () => {
                     Total Waste in Dustbin
                   </p>
                   <p className="text-2xl font-semibold text-gray-800">
-                    {data?.totalWeightData} kg
+                    {reportData?.totalWeightData} kg
                   </p>
                 </div>
               </div>
@@ -100,7 +127,7 @@ const Report: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-500">Total Dustbins</p>
                   <p className="text-2xl font-semibold text-gray-800">
-                    {data?.totalDustbins}
+                    {reportData?.totalDustbins}
                   </p>
                 </div>
               </div>
@@ -127,7 +154,7 @@ const Report: React.FC = () => {
                 <div>
                   <p className="text-sm text-gray-500">Active Bins</p>
                   <p className="text-2xl font-semibold text-gray-800">
-                    {data?.totalActiveDustbins}
+                    {reportData?.totalActiveDustbins}
                   </p>
                 </div>
               </div>

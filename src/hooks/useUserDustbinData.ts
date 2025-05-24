@@ -1,6 +1,6 @@
 import { fetchUserDustbinData } from "@/api/dustbinDataApi";
 import userLocationStore from "@/store/userLocationStore";
-import type { DustbinData, LocationData } from "@/types/dustbinTypes";
+import type { DustbinData, LocationData } from "@/models/dustbin-model";
 import { useEffect, useRef, useState } from "react";
 
 export function useUserDustbinData() {

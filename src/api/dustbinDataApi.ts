@@ -1,5 +1,5 @@
-import { DirectionsResponseDto } from "@/types/directionsResponseTypes";
-import { DustbinData } from "@/types/dustbinTypes";
+import { DirectionsResponseModel } from "@/models/directions-response-model";
+import { DustbinData } from "@/models/dustbin-model";
 import axios from "axios";
 
 export const fetchUserDustbinData = async (
@@ -44,9 +44,9 @@ export const fetchCollectRoute = async (
   localityName: string | null,
   latitude: string | number,
   longitude: string | number
-): Promise<DirectionsResponseDto> => {
+): Promise<DirectionsResponseModel> => {
   try {
-    const response = await axios.get<DirectionsResponseDto>(
+    const response = await axios.get<DirectionsResponseModel>(
       `${
         import.meta.env.VITE_ECOBIN_USER_DATA_SERVICE
       }/api/DustbinData/get-collect-path`,

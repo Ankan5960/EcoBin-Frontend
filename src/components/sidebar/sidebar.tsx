@@ -2,10 +2,23 @@ import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-propertie
 import { SquareX } from "lucide-react";
 import { useToggleSidebar } from "@/hooks/useToggleSidebar";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { LocalStorage } from "@/storage/LocalStorage";
+import { IUserLoginResponse } from "@/pages/login-page/login.model";
 
 const Sidebar = () => {
   const { isOpen, toggleSidebar } = useToggleSidebar();
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState("Guest");
+  const userLocalStorage = useMemo(
+    () => new LocalStorage<IUserLoginResponse>(),
+    []
+  );
+
+  useEffect(() => {
+    const user = userLocalStorage.get("user");
+    if (user) setUserRole(user.roleName);
+  }, [userLocalStorage]);
 
   return (
     <aside
@@ -18,24 +31,41 @@ const Sidebar = () => {
       <div className="lg:hidden">
         <SquareX size={24} onClick={toggleSidebar} />
       </div>
-      <button
-        onClick={() => navigate("/dashboard")}
-        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
-      >
-        Dashboard
-      </button>
-      <button
-        onClick={() => navigate("/dashboard/admin")}
-        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
-      >
-        Admin Setup
-      </button>
-      <button
-        onClick={() => navigate("/dashboard/report")}
-        className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
-      >
-        Admin Panel
-      </button>
+
+      {userRole === "Admin" || userRole === "Guest" ? (
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
+        >
+          Dashboard
+        </button>
+      ) : null}
+
+      {userRole === "Collector" ? (
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
+        >
+          Dashboard
+        </button>
+      ) : null}
+
+      {userRole === "Admin" ? (
+        <>
+          <button
+            onClick={() => navigate("/dashboard/admin")}
+            className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
+          >
+            Admin Setup
+          </button>
+          <button
+            onClick={() => navigate("/dashboard/report")}
+            className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
+          >
+            Admin Panel
+          </button>
+        </>
+      ) : null}
       <button
         onClick={() => navigate("/dashboard/settings")}
         className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"

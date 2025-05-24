@@ -1,6 +1,6 @@
 import { fetchCollectorDustbinData } from "@/api/dustbinDataApi";
 import userLocationStore from "@/store/userLocationStore";
-import type { DustbinData, LocationData } from "@/types/dustbinTypes";
+import type { DustbinData, LocationData } from "@/models/dustbin-model";
 import { useEffect, useRef, useState } from "react";
 
 export function useCollectorDustbinData(localityName: string) {
@@ -38,7 +38,7 @@ export function useCollectorDustbinData(localityName: string) {
     };
 
     loadData();
-  }, [localityName,locationData?.latitude, locationData?.longitude, data]);
+  }, [localityName, locationData?.latitude, locationData?.longitude, data]);
 
   return { data, loading };
 }

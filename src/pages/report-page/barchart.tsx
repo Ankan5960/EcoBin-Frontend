@@ -1,4 +1,4 @@
-import { DustbinStatusList } from "@/types/reportTypes";
+import { DustbinStatusList } from "@/models/report-model";
 import {
   Chart as ChartJS,
   CategoryScale,
