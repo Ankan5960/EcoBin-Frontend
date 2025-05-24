@@ -64,12 +64,13 @@ const userLocationStore = create<LocationState>((set, get) => ({
   fetchLocation: async () => {
     set({ loading: true, error: null });
 
-    try {
-      await get().fetchGeoLocation();
-    } catch {
-      // If geolocation fails, fallback to IP
-      await get().fetchLocationFromIP();
-    }
+    // try {
+    //   await get().fetchGeoLocation();
+    // } catch {
+    //   // If geolocation fails, fallback to IP
+    //   await get().fetchLocationFromIP();
+    // }
+    await get().fetchLocationFromIP();
 
     set({ loading: false });
   },

@@ -32,7 +32,7 @@ const Sidebar = () => {
         <SquareX size={24} onClick={toggleSidebar} />
       </div>
 
-      {userRole === "Admin" || userRole === "Guest" ? (
+      {userRole === "Admin" || userRole === "Guest" || userRole === "User" ? (
         <button
           onClick={() => navigate("/dashboard")}
           className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"

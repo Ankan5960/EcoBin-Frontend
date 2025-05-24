@@ -15,7 +15,7 @@ const statuses = [
   { statusName: "Low Risk", statusValue: 50 }, // blue-500
 ];
 
-const Report: React.FC = () => {
+const AdminPanel: React.FC = () => {
   const [reportData, setReportData] = useState<ReportDataResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -248,4 +248,4 @@ const Report: React.FC = () => {
   );
 };
 
-export default Report;
+export default AdminPanel;

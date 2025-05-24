@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import userLocationStore from "@/store/userLocationStore";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const { fetchGeoLocation, loading, location } = userLocationStore();
+  const { fetchLocation, loading, location } = userLocationStore();
 
   useEffect(() => {
-    fetchGeoLocation();
-  }, [fetchGeoLocation]);
+    fetchLocation();
+  }, [fetchLocation]);
 
   if (loading || !location) return <div>Getting your location...</div>;
 

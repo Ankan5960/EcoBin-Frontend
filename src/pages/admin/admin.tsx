@@ -7,7 +7,7 @@ import { AdminFormInputs } from "@/models/admin-api-models";
 import { DustbinDetailsDataModel } from "@/models/dustbin-details-data-model";
 import axios from "axios";
 
-const AdminPanel: React.FC = () => {
+const AdminSetup: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -458,4 +458,4 @@ const AdminPanel: React.FC = () => {
   );
 };
 
-export default AdminPanel;
+export default AdminSetup;

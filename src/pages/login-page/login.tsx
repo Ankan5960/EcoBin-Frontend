@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ILoginRequest } from "./login.model";
 import { useState } from "react";
 import { LogInService } from "./login.service";
+import { setAuthState } from "@/store/authStore";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -17,11 +18,11 @@ const Login: React.FC = () => {
 
   const handleLogin = async (data: ILoginRequest) => {
     setServerError("");
-    const response = await loginService.logIn(data);
+    const response = await loginService.logIn(data, setAuthState);
 
     if (response.isSuccess) {
       console.log("Login successful:", response.userData);
-      navigate("/dashboard");
+      window.location.href = "/dashboard";
     } else {
       console.error("Login failed:", response.errorData);
       setServerError(response.errorData?.message || "Signup failed");

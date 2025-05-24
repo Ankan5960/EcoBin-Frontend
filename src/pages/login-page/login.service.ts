@@ -1,4 +1,8 @@
-import { ILoginRequest, ILoginResponse, IUserLoginResponse } from "./login.model";
+import {
+  ILoginRequest,
+  ILoginResponse,
+  IUserLoginResponse,
+} from "./login.model";
 import { IErrorResponseModel } from "../../models/error-response-model";
 import getIp from "@/service/ip-service";
 import getDeviceInfo from "@/service/device-info-service";
@@ -6,10 +10,12 @@ import apiClient from "@/service/api-service";
 import { LocalStorage } from "@/storage/LocalStorage";
 
 export class LogInService {
-
   userLocalStorage = new LocalStorage<IUserLoginResponse>();
 
-  public async logIn(loginData: ILoginRequest): Promise<ILoginResponse> {
+  public async logIn(
+    loginData: ILoginRequest,
+    setStorage: (user: IUserLoginResponse | null) => void
+  ): Promise<ILoginResponse> {
     const url = `/user-auth/auth/login`;
     loginData.ipAddress = await getIp();
     loginData.deviceInfo = getDeviceInfo();
@@ -20,9 +26,10 @@ export class LogInService {
 
       loginResponse.userData = response.data;
       loginResponse.isSuccess = true;
-      if (loginResponse.userData) {
-        this.userLocalStorage.set("user", loginResponse.userData);
-      }
+      // if (loginResponse.userData) {
+      //   this.userLocalStorage.set("user", loginResponse.userData);
+      // }
+      setStorage(loginResponse.userData);
       return loginResponse;
     } catch (error) {
       const errorResponse = error as {
