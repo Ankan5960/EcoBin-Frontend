@@ -1,3 +1,5 @@
+import { IErrorResponseModel } from "@/models/error-response-model";
+
 export type DustbinStatus = {
   statusName: string;
   statusValue: number;
@@ -16,10 +18,15 @@ export interface DustbinCategoryList {
   dustbinCategoryList: DustbinCategory[];
 }
 
-export interface ReportDataResponse {
+export interface AdminPanelData {
   totalDustbins: string;
   totalActiveDustbins: string;
   totalWeightData: string;
   totalAirQualityData: string;
   categories: Record<string, number>;
+}
+
+export interface AdminPanelDataResponse {
+  adminPanelData: AdminPanelData;
+  errorData: IErrorResponseModel | null;
 }

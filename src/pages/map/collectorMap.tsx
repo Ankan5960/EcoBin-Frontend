@@ -14,7 +14,6 @@ import { useCollectorDustbinData } from "@/hooks/useCollectorDustbinData";
 import { fetchCollectRoute } from "@/api/dustbinDataApi";
 import type { Feature, GeoJsonProperties, Geometry } from "geojson";
 import { Button } from "@mui/material";
-import mapBoxApiKeyStore from "@/store/mapBoxApiKeyStore";
 
 const generatePopupContent = (
   isDangrouse: boolean | null,
@@ -199,19 +198,9 @@ const CollectorMap: React.FC = () => {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const location = userLocationStore((state) => state.location);
   const { data } = useCollectorDustbinData("new town");
-  const mapboxApiKey = mapBoxApiKeyStore((state) => state.mapBoxApiKey);
-  const fetchMapBoxApiKey = mapBoxApiKeyStore(
-    (state) => state.fetchMapBoxApiKey
-  );
 
   useEffect(() => {
-    if (!mapboxApiKey) {
-      fetchMapBoxApiKey();
-    }
-  }, [fetchMapBoxApiKey, mapboxApiKey]);
-
-  useEffect(() => {
-    if (!mapboxApiKey || !location) return;
+    if (!location) return;
 
     const initializedMap = mapBoxConfiguration(mapContainerRef, location);
     setMap(initializedMap);
@@ -221,7 +210,7 @@ const CollectorMap: React.FC = () => {
     }
 
     return () => initializedMap.remove();
-  }, [data, location, mapboxApiKey]);
+  }, [data, location]);
 
   return (
     <main className="flex-1 p-6 bg-gray-100 overflow-hidden">

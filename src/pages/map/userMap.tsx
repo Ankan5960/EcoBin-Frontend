@@ -11,7 +11,6 @@ import type {
 } from "@/models/dustbin-model";
 import userLocationStore from "@/store/userLocationStore";
 import { useUserDustbinData } from "@/hooks/useUserDustbinData";
-import mapBoxApiKeyStore from "@/store/mapBoxApiKeyStore";
 
 const generatePopupContent = (
   sensorData: SensorData,
@@ -83,19 +82,9 @@ const UserMap: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const location = userLocationStore((state) => state.location);
   const { data } = useUserDustbinData();
-  const mapboxApiKey = mapBoxApiKeyStore((state) => state.mapBoxApiKey);
-  const fetchMapBoxApiKey = mapBoxApiKeyStore(
-    (state) => state.fetchMapBoxApiKey
-  );
 
   useEffect(() => {
-    if (!mapboxApiKey) {
-      fetchMapBoxApiKey();
-    }
-  }, [fetchMapBoxApiKey, mapboxApiKey]);
-
-  useEffect(() => {
-    if (!mapboxApiKey || !location) return;
+    if (!location) return;
 
     const map = mapBoxConfiguration(mapContainerRef, location);
     if (data) {
@@ -103,7 +92,7 @@ const UserMap: React.FC = () => {
     }
 
     return () => map.remove();
-  }, [data, location, mapboxApiKey]);
+  }, [data, location]);
 
   return (
     <main className="flex-1 p-6 bg-gray-100 overflow-hidden">

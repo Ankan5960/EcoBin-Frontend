@@ -2,23 +2,12 @@ import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-propertie
 import { SquareX } from "lucide-react";
 import { useToggleSidebar } from "@/hooks/useToggleSidebar";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
-import { LocalStorage } from "@/storage/LocalStorage";
-import { IUserLoginResponse } from "@/pages/login-page/login.model";
+import { useAuthRole } from "@/store/authStore";
 
 const Sidebar = () => {
   const { isOpen, toggleSidebar } = useToggleSidebar();
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState("Guest");
-  const userLocalStorage = useMemo(
-    () => new LocalStorage<IUserLoginResponse>(),
-    []
-  );
-
-  useEffect(() => {
-    const user = userLocalStorage.get("user");
-    if (user) setUserRole(user.roleName);
-  }, [userLocalStorage]);
+  const role = useAuthRole();
 
   return (
     <aside
@@ -32,7 +21,7 @@ const Sidebar = () => {
         <SquareX size={24} onClick={toggleSidebar} />
       </div>
 
-      {userRole === "Admin" || userRole === "Guest" || userRole === "User" ? (
+      {role === "Admin" || role === "Guest" || role === "User" || role === null ? (
         <button
           onClick={() => navigate("/dashboard")}
           className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
@@ -41,7 +30,7 @@ const Sidebar = () => {
         </button>
       ) : null}
 
-      {userRole === "Collector" ? (
+      {role === "Collector" ? (
         <button
           onClick={() => navigate("/dashboard")}
           className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
@@ -50,16 +39,16 @@ const Sidebar = () => {
         </button>
       ) : null}
 
-      {userRole === "Admin" ? (
+      {role === "Admin" ? (
         <>
           <button
-            onClick={() => navigate("/dashboard/admin")}
+            onClick={() => navigate("/dashboard/admin-setup")}
             className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
           >
             Admin Setup
           </button>
           <button
-            onClick={() => navigate("/dashboard/report")}
+            onClick={() => navigate("/dashboard/admin-panel")}
             className="block text-left w-full py-2 px-4 rounded hover:bg-gray-700"
           >
             Admin Panel

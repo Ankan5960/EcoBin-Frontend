@@ -28,3 +28,9 @@ export const setAuthState = (user: IUserLoginResponse | null) => {
   useAuthStore.setState({ authUser: user });
   user != null && setUserDataInLocalStorage(user);
 };
+
+export const clearAuthState = () => {
+  useAuthStore.setState({ authUser: null });
+  const storage = new LocalStorage<IUserLoginResponse>();
+  storage.remove("user");
+};

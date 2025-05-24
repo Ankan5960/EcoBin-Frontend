@@ -1,4 +1,4 @@
-import { DustbinCategoryList } from "@/models/report-model";
+import { DustbinCategoryList } from "@/pages/admin-panel-page/admin-panel-model";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 

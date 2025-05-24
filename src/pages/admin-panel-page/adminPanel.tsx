@@ -3,9 +3,9 @@ import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-propertie
 import { DoughnutChart } from "./doughnutchart";
 import { BarChart } from "./barchart";
 
-import { ReportDataService } from "./report.service";
+import { AdminPanelDataService } from "./admin-panel.service";
 import { useEffect, useState } from "react";
-import { ReportDataResponse } from "@/models/report-model";
+import { AdminPanelData } from "@/pages/admin-panel-page/admin-panel-model";
 import { calculateEnvironmentalImpact } from "@/utility/environmental";
 import { downloadAsPdf } from "@/utility/downloadAsPdf";
 
@@ -16,15 +16,17 @@ const statuses = [
 ];
 
 const AdminPanel: React.FC = () => {
-  const [reportData, setReportData] = useState<ReportDataResponse | null>(null);
+  const [reportData, setReportData] = useState<AdminPanelData | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const service = new ReportDataService();
-      const data = await service.fetchReportData();
-      if ("totalWeightData" in data) {
-        setReportData(data);
+      const service = new AdminPanelDataService();
+      const data = await service.fetchAdminPanelData();
+      if (data) {
+        setReportData(data.adminPanelData);
       }
       setLoading(false);
     };

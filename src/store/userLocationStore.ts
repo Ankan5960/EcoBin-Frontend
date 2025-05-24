@@ -8,7 +8,7 @@ interface LocationState {
   error: string | null;
   fetchLocationFromIP: () => Promise<void>;
   fetchGeoLocation: () => Promise<void>;
-  fetchLocation: () => Promise<void>; // Main function to call
+  fetchLocation: () => Promise<void>;
 }
 
 const userLocationStore = create<LocationState>((set, get) => ({
@@ -64,13 +64,11 @@ const userLocationStore = create<LocationState>((set, get) => ({
   fetchLocation: async () => {
     set({ loading: true, error: null });
 
-    // try {
-    //   await get().fetchGeoLocation();
-    // } catch {
-    //   // If geolocation fails, fallback to IP
-    //   await get().fetchLocationFromIP();
-    // }
-    await get().fetchLocationFromIP();
+    try {
+      await get().fetchGeoLocation();
+    } catch {
+      await get().fetchLocationFromIP();
+    }
 
     set({ loading: false });
   },

@@ -2,7 +2,7 @@ import type { RouteObject } from "react-router-dom";
 import UserMap from "../pages/map/userMap";
 import CollectorMap from "../pages/map/collectorMap";
 import AdminSetup from "../pages/admin/admin";
-import AdminPanel from "../pages/report-page/report";
+import AdminPanel from "../pages/admin-panel-page/adminPanel";
 import Settings from "../pages/setting-page/setting";
 import ContactUs from "../pages/contactus-page/contactUs";
 

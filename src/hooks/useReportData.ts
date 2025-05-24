@@ -1,9 +1,9 @@
 import { fetchReportData } from "@/api/reportApi";
-import type { ReportDataResponse } from "@/models/report-model";
+import type { AdminPanelData } from "@/pages/admin-panel-page/admin-panel-model";
 import { useEffect, useState } from "react";
 
 export const useReportData = () => {
-  const [data, setData] = useState<ReportDataResponse | null>(null);
+  const [data, setData] = useState<AdminPanelData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
