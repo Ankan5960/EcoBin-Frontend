@@ -3,14 +3,9 @@ import type React from "react";
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type {
-  CategoryEntity,
-  DustbinData,
-  LocationData,
-  SensorData,
-} from "@/models/dustbin-model";
 import userLocationStore from "@/store/userLocationStore";
 import { useUserDustbinData } from "@/hooks/useUserDustbinData";
+import { CategoryEntity, DustbinData, LocationData, SensorData } from "@/components/dustbin-data/dustbin-data-model";
 
 const generatePopupContent = (
   sensorData: SensorData,

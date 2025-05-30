@@ -1,15 +1,13 @@
 import type { RouteObject } from "react-router-dom";
-import UserMap from "../pages/map/userMap";
-import CollectorMap from "../pages/map/collectorMap";
-import AdminSetup from "../pages/admin/admin";
+import AdminSetup from "../pages/admin-setup/adminSetUp";
 import AdminPanel from "../pages/admin-panel-page/adminPanel";
 import Settings from "../pages/setting-page/setting";
 import ContactUs from "../pages/contactus-page/contactUs";
+import MapPage from "@/pages/map/mapPage";
 
 export function getDashboardChildren(role: string | undefined): RouteObject[] {
   const routes: RouteObject[] = [
-    { index: true, element: <UserMap /> },
-    { path: "collectormap", element: <CollectorMap /> },
+    { index: true, element: <MapPage /> },
     { path: "settings", element: <Settings /> },
     { path: "contactus", element: <ContactUs /> },
   ];

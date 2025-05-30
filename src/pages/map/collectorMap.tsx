@@ -1,19 +1,15 @@
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type {
-  CategoryEntity,
-  DustbinData,
-  LocationData,
-  SensorData,
-} from "@/models/dustbin-model";
+
 import userLocationStore from "@/store/userLocationStore";
 import { useCollectorDustbinData } from "@/hooks/useCollectorDustbinData";
-import { fetchCollectRoute } from "@/api/dustbinDataApi";
 import type { Feature, GeoJsonProperties, Geometry } from "geojson";
 import { Button } from "@mui/material";
+import { CategoryEntity, DustbinData, LocationData, SensorData } from "@/components/dustbin-data/dustbin-data-model";
+import { DustbinDataService } from "@/components/dustbin-data/dustbin-data.service";
 
 const generatePopupContent = (
   isDangrouse: boolean | null,
@@ -89,14 +85,19 @@ const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[]) => {
 };
 
 const handleRoutes = async (
+  dustbinService: DustbinDataService,
   map: mapboxgl.Map,
   dustbindata: DustbinData[] | null,
   localityName: string,
   latitude: string,
   longitude: string
 ) => {
-  const res = await fetchCollectRoute(localityName, latitude, longitude);
-  const data = res.routes[0];
+  const res = await dustbinService.fetchCollectRoute({
+    localityName,
+    latitude,
+    longitude,
+  });
+  const data = res.data.routes[0];
   const geojson: Feature<Geometry, GeoJsonProperties> = {
     type: "Feature",
     properties: {},
@@ -198,6 +199,7 @@ const CollectorMap: React.FC = () => {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const location = userLocationStore((state) => state.location);
   const { data } = useCollectorDustbinData("new town");
+  const dustbinService = useMemo(() => new DustbinDataService(), []);
 
   useEffect(() => {
     if (!location) return;
@@ -237,6 +239,7 @@ const CollectorMap: React.FC = () => {
         onClick={() => {
           if (location && map) {
             handleRoutes(
+              dustbinService,
               map,
               data,
               "new town",

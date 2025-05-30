@@ -1,6 +1,4 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
-import { LocalStorage } from "../storage/LocalStorage";
-import { BrowserStorageKeys } from "../configurations/browser-storage-keys";
 // import { IStorage } from "../storage/IStorage";
 // import { IAuthState } from "../auth/auth-store";
 // import { IUserLoginResponse } from "../pages/login-page/login.model";
@@ -8,7 +6,7 @@ import { BrowserStorageKeys } from "../configurations/browser-storage-keys";
 const getBaseUrl = () => {
   const currentUrl = window.location.href;
   const site = currentUrl.split("//")[1].split(":")[0];
-  if (site.includes("anefreeinity")) return "http://localhost";
+  if (site.includes("ecobin")) return "http://localhost";
   const BASEURL = `http://${site}:6010`;
   return BASEURL;
 };
@@ -42,8 +40,18 @@ apiClient.interceptors.response.use(
 );
 
 export const getAccessToken = async () => {
-  const storage = new LocalStorage<string>();
-  return await storage.get(BrowserStorageKeys.ACCESS_TOKEN);
+  // const storage = new LocalStorage<string>();
+  // return await storage.get(BrowserStorageKeys.ACCESS_TOKEN);
+  const userDataString = localStorage.getItem("user"); // replace with actual key if different
+  if (!userDataString) return null;
+
+  try {
+    const userData = JSON.parse(userDataString);
+    return userData.accessToken || null;
+  } catch (err) {
+    console.error("Failed to parse user data from localStorage", err);
+    return null;
+  }
 };
 
 // const setAccessToken = async (accessToken: string) => {

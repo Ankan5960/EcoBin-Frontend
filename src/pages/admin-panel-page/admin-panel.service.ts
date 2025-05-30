@@ -1,11 +1,25 @@
-import { AdminPanelDataResponse } from "@/pages/admin-panel-page/admin-panel-model";
+import { AdminPanelData, AdminPanelDataResponse } from "@/pages/admin-panel-page/admin-panel-model";
 import { IErrorResponseModel } from "../../models/error-response-model";
 import apiClient from "@/service/api-service";
+
+function getDefaultAdminPanelData(): AdminPanelData {
+  return {
+    totalDustbins: "0",
+    totalActiveDustbins: "0",
+    totalWeightData: "0",
+    totalAirQualityData: "0",
+    categories: {},
+  };
+}
 
 export class AdminPanelDataService {
   public async fetchAdminPanelData(): Promise<AdminPanelDataResponse> {
     const url = `/report-data/getReportData`;
-    const adminPanelResponse = {} as AdminPanelDataResponse;
+    const adminPanelResponse: AdminPanelDataResponse = {
+      adminPanelData: getDefaultAdminPanelData(),
+      errorData: null,
+    };
+    
     try {
       const response = await apiClient.get(url);
 

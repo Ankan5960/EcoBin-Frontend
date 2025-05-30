@@ -16,14 +16,12 @@ const statuses = [
 ];
 
 const AdminPanel: React.FC = () => {
-  const [reportData, setReportData] = useState<AdminPanelData | null>(
-    null
-  );
+  const [reportData, setReportData] = useState<AdminPanelData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const service = new AdminPanelDataService();
 
   useEffect(() => {
     const fetchData = async () => {
-      const service = new AdminPanelDataService();
       const data = await service.fetchAdminPanelData();
       if (data) {
         setReportData(data.adminPanelData);

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { deleteSetup, fetchSetup, postSetup } from "@/api/adminSetupApi";
 import { AdminFormInputs } from "@/models/admin-api-models";
-import { DustbinDetailsDataModel } from "@/models/dustbin-details-data-model";
 import axios from "axios";
+import { AdminSetUpService } from "./admin-setup.service";
+import { DustbinDetailsDataModel } from "@/components/dustbin-data/dustbin-data-model";
 
 const AdminSetup: React.FC = () => {
   const {
@@ -25,14 +25,15 @@ const AdminSetup: React.FC = () => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<string>("");
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const adminSetUpService = new AdminSetUpService();
 
   const onSubmit: SubmitHandler<AdminFormInputs> = async (data) => {
     setResponseMessage("");
     setResponseType(null);
 
     try {
-      const res = await postSetup(data);
-      setResponseMessage(res); // Assuming the response is a string or message
+      const res = await adminSetUpService.postSetup(data);
+      setResponseMessage(res.data.dustbinId); // Assuming the response is a string or message
       setResponseType("success");
       reset();
     } catch (err) {
@@ -47,8 +48,8 @@ const AdminSetup: React.FC = () => {
     setDeleteMessage("");
     setDeleteError(null);
     try {
-      const response = await fetchSetup(dustbinId);
-      setFetchedData(response);
+      const response = await adminSetUpService.getSetup(dustbinId);
+      setFetchedData(response.data);
     } catch (error) {
       console.error("Failed to fetch setup:", error);
       if (axios.isAxiosError(error)) {
@@ -65,8 +66,8 @@ const AdminSetup: React.FC = () => {
     setFetchedData(null);
     setFetchError(null);
     try {
-      const response = await deleteSetup(dustbinId);
-      setDeleteMessage(response); // Assuming it's a string message
+      const response = await adminSetUpService.deleteSetup(dustbinId);
+      setDeleteMessage(response.data.message); // Assuming it's a string message
     } catch (error) {
       console.error("Failed to delete setup:", error);
       if (axios.isAxiosError(error)) {

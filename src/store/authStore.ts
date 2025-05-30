@@ -26,7 +26,9 @@ export const useAuthRole = () =>
 
 export const setAuthState = (user: IUserLoginResponse | null) => {
   useAuthStore.setState({ authUser: user });
-  user != null && setUserDataInLocalStorage(user);
+  if (user != null) {
+    setUserDataInLocalStorage(user);
+  }
 };
 
 export const clearAuthState = () => {
