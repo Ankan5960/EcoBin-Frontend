@@ -16,7 +16,7 @@ const setUserDataInLocalStorage = (user: IUserLoginResponse) => {
   storage.set("user", user);
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>(() => ({
   authUser: fetchUserDataFromLocalStorage(),
 }));
 
