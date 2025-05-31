@@ -1,2 +1,2 @@
-/*    /index.html   200
-/*    /https://ecobin.ddns.net   200
+/api/*    https://ecobin.ddns.net/api/:splat   200
+/*        /index.html                          200
