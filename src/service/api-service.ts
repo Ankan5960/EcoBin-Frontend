@@ -7,7 +7,7 @@ const getBaseUrl = () => {
   // const currentUrl = window.location.href;
   // const site = currentUrl.split("//")[1].split(":")[0];
   // if (site.includes("ecobin")) return "http://localhost";
-  const BASEURL = import.meta.env.VITE_EcoBin_API_URL;
+  const BASEURL = import.meta.env.VITE_ECOBIN_API_URL;
   return BASEURL;
 };
 
