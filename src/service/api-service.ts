@@ -4,9 +4,9 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 // import { IUserLoginResponse } from "../pages/login-page/login.model";
 
 const getBaseUrl = () => {
-  const currentUrl = window.location.href;
-  const site = currentUrl.split("//")[1].split(":")[0];
-  if (site.includes("ecobin")) return "http://localhost";
+  // const currentUrl = window.location.href;
+  // const site = currentUrl.split("//")[1].split(":")[0];
+  // if (site.includes("ecobin")) return "http://localhost";
   const BASEURL = import.meta.env.VITE_EcoBin_API_URL;
   return BASEURL;
 };
