@@ -36,7 +36,6 @@ export class DustbinDataService {
     const getResponse = {} as IDustbinDataResponse;
     try {
       const response = await apiClient.get(url);
-      console.log("dustbin setup data:", response.data);
       getResponse.data = response.data;
       getResponse.isSucess = true;
       return getResponse;
