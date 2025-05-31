@@ -7,6 +7,12 @@ import axios from "axios";
 import { AdminSetUpService } from "./admin-setup.service";
 import { DustbinDetailsDataModel } from "@/components/dustbin-data/dustbin-data-model";
 
+function formatLabel(key: string) {
+  return key
+    .replace(/([A-Z])/g, ' $1')       // insert space before capital letters
+    .replace(/^./, str => str.toUpperCase()); // capitalize first letter
+}
+
 const AdminSetup: React.FC = () => {
   const {
     register,
@@ -263,6 +269,31 @@ const AdminSetup: React.FC = () => {
                 Dustbin Details:
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(fetchedData).map(([key, value]) => (
+                  <div
+                    key={key}
+                    className={`py-2 ${
+                      key === "addressName" ? "col-span-full" : ""
+                    }`}
+                  >
+                    <strong className="font-semibold text-gray-700">
+                      {formatLabel(key)}:
+                    </strong>{" "}
+                    <span className="text-gray-600">{String(value)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* {fetchedData && (
+            <div className="mt-4 p-4 rounded-md bg-gray-50 border border-gray-200">
+              <h4
+                className={`${DEFAULT_ITEM_PROPERTIES.heading.heading4} mb-2 text-gray-800`}
+              >
+                Dustbin Details:
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="py-2">
                   <strong className="font-semibold text-gray-700">
                     Dustbin ID:
@@ -397,7 +428,8 @@ const AdminSetup: React.FC = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
+
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
@@ -443,6 +475,8 @@ const AdminSetup: React.FC = () => {
             </p>
           )}
         </div>
+
+
 
         {isCopied && (
           <div className="fixed bottom-4 right-4 z-50 w-auto max-w-xs sm:max-w-sm">

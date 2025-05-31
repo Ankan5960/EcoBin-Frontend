@@ -5,7 +5,13 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import userLocationStore from "@/store/userLocationStore";
 import { useUserDustbinData } from "@/hooks/useUserDustbinData";
-import { CategoryEntity, DustbinData, LocationData, SensorData } from "@/components/dustbin-data/dustbin-data-model";
+import {
+  CategoryEntity,
+  DustbinData,
+  LocationData,
+  SensorData,
+} from "@/components/dustbin-data/dustbin-data-model";
+import { Button } from "@mui/material";
 
 const generatePopupContent = (
   sensorData: SensorData,
@@ -21,16 +27,18 @@ const generatePopupContent = (
   `;
 };
 
+const handelNearestDustbins = () => {
+  // Implement the logic to handle nearest dustbins
+  window.alert("Nearest dustbins feature is not implemented yet.");
+}
 const mapBoxConfiguration = (
   mapContainerRef: React.RefObject<HTMLDivElement | null>,
   userLocation: LocationData | null
-  //mapboxApiKey: string | null
 ) => {
   if (!mapContainerRef.current) {
     throw new Error("Map container not ready");
   }
 
-  // mapboxgl.accessToken = mapboxApiKey;
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   const map = new mapboxgl.Map({
@@ -94,16 +102,26 @@ const UserMap: React.FC = () => {
       <h1 className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} " mb-4`}>
         EcoBin Map
       </h1>
-      <h1>
+      {/* <h1>
         Your Location: Latitude: {location?.latitude || "Loading..."},
         Longitude: {location?.longitude || "Loading..."},
-      </h1>
+      </h1> */}
       <div className="relative">
         <div
           ref={mapContainerRef}
-          className="h-[calc(100vh-230px)] w-full rounded-lg shadow-md"
+          className="h-[calc(100vh-270px)] w-full rounded-lg shadow-md"
         />
       </div>
+      <div className="mt-2"></div>
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={() => handelNearestDustbins()}
+        className="mt-4"
+      >
+        Show Nearest Dustbins
+      </Button>
     </main>
   );
 };

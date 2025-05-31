@@ -8,7 +8,12 @@ import userLocationStore from "@/store/userLocationStore";
 import { useCollectorDustbinData } from "@/hooks/useCollectorDustbinData";
 import type { Feature, GeoJsonProperties, Geometry } from "geojson";
 import { Button } from "@mui/material";
-import { CategoryEntity, DustbinData, LocationData, SensorData } from "@/components/dustbin-data/dustbin-data-model";
+import {
+  CategoryEntity,
+  DustbinData,
+  LocationData,
+  SensorData,
+} from "@/components/dustbin-data/dustbin-data-model";
 import { DustbinDataService } from "@/components/dustbin-data/dustbin-data.service";
 
 const generatePopupContent = (
@@ -215,27 +220,26 @@ const CollectorMap: React.FC = () => {
   }, [data, location]);
 
   return (
-    <main className="flex-1 p-6 bg-gray-100 overflow-hidden">
+    <main className="flex-1 p-4 bg-gray-100 overflow-hidden">
       <h1 className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} mb-4`}>
-        EcoBin Map
+        EcoBin Collector Map
       </h1>
-      <p>
+      {/* <p>
         Your Location: Latitude: {location?.latitude || "Loading..."},
         Longitude: {location?.longitude || "Loading..."}
-      </p>
+      </p> */}
 
       <div className="relative">
         <div
           ref={mapContainerRef}
-          className="h-[calc(100vh-230px)] w-full rounded-lg shadow-md"
+          className="h-[calc(100vh-270px)] w-full rounded-lg shadow-md"
         />
       </div>
-
+      <div className="mt-2"></div>
       <Button
         variant="contained"
         color="primary"
         fullWidth
-        className="mt-4"
         onClick={() => {
           if (location && map) {
             handleRoutes(
