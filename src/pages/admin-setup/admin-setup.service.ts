@@ -11,7 +11,7 @@ export class AdminSetUpService {
   public async postSetup(
     postData: IDustbinSetUpPostRequest
   ): Promise<IAdminSetupPostResponse> {
-    const url = `/dustbinSetup/setup`;
+    const url = `/api/dustbinSetup/setup`;
     const postResponse = {} as IAdminSetupPostResponse;
     try {
       const response = await apiClient.post(url, postData);
@@ -33,7 +33,7 @@ export class AdminSetUpService {
   public async getSetup(
     dustbinId: string 
   ): Promise<IAdminSetupGetResponse> {
-    const url = `/dustbinSetup/getsetup?dustbinId=${dustbinId}`;
+    const url = `/api/dustbinSetup/getsetup?dustbinId=${dustbinId}`;
     const getResponse = {} as IAdminSetupGetResponse;
     try {
       const response = await apiClient.get(url);
@@ -55,7 +55,7 @@ export class AdminSetUpService {
   public async deleteSetup(
     dustbinId: string
   ): Promise<IAdminSetupDeleteResponse> {
-    const url = `/dustbinSetup/deleteSetup?dustbinId=${dustbinId}`;
+    const url = `/api/dustbinSetup/deleteSetup?dustbinId=${dustbinId}`;
     const deleteResponse = {} as IAdminSetupDeleteResponse;
     try {
       const response = await apiClient.delete(url);

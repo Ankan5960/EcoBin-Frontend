@@ -11,7 +11,7 @@ export class DustbinDataService {
   public async fetchUserDustbinData(
     userLocation: LocationData
   ): Promise<IDustbinDataResponse> {
-    const url = `/user-data/get-user-dustbin-data?Latitude=${userLocation.latitude}&Longitude=${userLocation.longitude}`;
+    const url = `/api/user-data/get-user-dustbin-data?Latitude=${userLocation.latitude}&Longitude=${userLocation.longitude}`;
     const postResponse = {} as IDustbinDataResponse;
     try {
       const response = await apiClient.get(url);
@@ -32,7 +32,7 @@ export class DustbinDataService {
   public async fetchCollectorDustbinData(
     colletorLocation: collectorDustbinDataRequest
   ): Promise<IDustbinDataResponse> {
-    const url = `/user-data/get-collector-dustbin-data?LocalityName=${colletorLocation.localityName}&Latitude=${colletorLocation.latitude}&Longitude=${colletorLocation.longitude}`;
+    const url = `/api/user-data/get-collector-dustbin-data?LocalityName=${colletorLocation.localityName}&Latitude=${colletorLocation.latitude}&Longitude=${colletorLocation.longitude}`;
     const getResponse = {} as IDustbinDataResponse;
     try {
       const response = await apiClient.get(url);
@@ -53,7 +53,7 @@ export class DustbinDataService {
   public fetchCollectRoute = async (
     colletorLocation: collectorDustbinDataRequest
   ): Promise<ICollectorDustbinDataResponse> => {
-    const url = `/user-data/get-collect-path?LocalityName=${colletorLocation.localityName}&Latitude=${colletorLocation.latitude}&Longitude=${colletorLocation.longitude}`;
+    const url = `/api/user-data/get-collect-path?LocalityName=${colletorLocation.localityName}&Latitude=${colletorLocation.latitude}&Longitude=${colletorLocation.longitude}`;
     const getResponse = {} as ICollectorDustbinDataResponse;
     try {
       const response = await apiClient.get(url);

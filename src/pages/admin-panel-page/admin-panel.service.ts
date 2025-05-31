@@ -14,7 +14,7 @@ function getDefaultAdminPanelData(): AdminPanelData {
 
 export class AdminPanelDataService {
   public async fetchAdminPanelData(): Promise<AdminPanelDataResponse> {
-    const url = `/report-data/getReportData`;
+    const url = `/api/report-data/getReportData`;
     const adminPanelResponse: AdminPanelDataResponse = {
       adminPanelData: getDefaultAdminPanelData(),
       errorData: null,

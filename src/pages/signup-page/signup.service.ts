@@ -4,7 +4,7 @@ import { ISignupRequest, ISignupResponse } from "./signup.model";
 
 export class SignUpService {
   public async signup(signupData: ISignupRequest): Promise<ISignupResponse> {
-    const url = `/user-auth/auth/signup`;
+    const url = `/api/user-auth/auth/signup`;
     const signupResponse = {} as ISignupResponse;
     try {
       const response = await apiClient.post(url, signupData);

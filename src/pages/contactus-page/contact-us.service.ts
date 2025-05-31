@@ -10,7 +10,7 @@ export class ContactUsService {
   public async postContactUs(
     fromData: IContactUsFromRequestModel
   ): Promise<IContactUsFromResponseModel> {
-    const url = `/user-data/post-contact-us`;
+    const url = `/api/user-data/post-contact-us`;
     try {
       const response = await apiClient.post(url, fromData);
       console.log("contact us data:", response.data);

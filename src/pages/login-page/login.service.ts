@@ -16,7 +16,7 @@ export class LogInService {
     loginData: ILoginRequest,
     setStorage: (user: IUserLoginResponse | null) => void
   ): Promise<ILoginResponse> {
-    const url = `/user-auth/auth/login`;
+    const url = `/api/user-auth/auth/login`;
     loginData.ipAddress = await getIp();
     loginData.deviceInfo = getDeviceInfo();
     const loginResponse = {} as ILoginResponse;
