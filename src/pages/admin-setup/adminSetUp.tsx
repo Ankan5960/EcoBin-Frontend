@@ -2,27 +2,41 @@ import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { DEFAULT_ITEM_PROPERTIES } from "@/configurations/default-item-properties";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AdminFormInputs } from "@/models/admin-api-models";
 import axios from "axios";
 import { AdminSetUpService } from "./admin-setup.service";
 import { DustbinDetailsDataModel } from "@/components/dustbin-data/dustbin-data-model";
+import {
+  DustbinFormInputs,
+  RoleResponse,
+  RoleFormInputs,
+} from "./admin-setup-model";
 
 function formatLabel(key: string) {
   return key
-    .replace(/([A-Z])/g, ' $1')       // insert space before capital letters
-    .replace(/^./, str => str.toUpperCase()); // capitalize first letter
+    .replace(/([A-Z])/g, " $1") // insert space before capital letters
+    .replace(/^./, (str) => str.toUpperCase()); // capitalize first letter
 }
 
 const AdminSetup: React.FC = () => {
+  const [roles, setRoles] = useState<RoleResponse[]>([]);
   const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<AdminFormInputs>();
-
-  const [responseMessage, setResponseMessage] = useState<string>("");
-  const [responseType, setResponseType] = useState<"success" | "error" | null>(
+    register: registerDustbin,
+    handleSubmit: handleDustbinSetupSubmit,
+    reset: resetDustbin,
+    formState: { errors: errorsDustbin, isSubmitting: isSubmittingDustbin },
+  } = useForm<DustbinFormInputs>();
+  const {
+    register: registerRole,
+    handleSubmit: handleRoleSetupSubmit,
+    reset: resetRole,
+    formState: { errors: errorsRole, isSubmitting: isSubmittingRole },
+  } = useForm<RoleFormInputs>();
+  const [responseRoleSetupMessage, setResponseRoleSetupMessage] = useState<string>("");
+  const [roleResponseType, setRoleResponseType] = useState<"success" | "error" | null>(
+    null
+  );
+  const [responseDustbinSetupMessage, setResponseDustbinSetupMessage] = useState<string>("");
+  const [dustbinResponseType, setDustbinResponseType] = useState<"success" | "error" | null>(
     null
   );
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -31,20 +45,40 @@ const AdminSetup: React.FC = () => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<string>("");
   const [deleteError, setDeleteError] = useState<string | null>(null);
-  const adminSetUpService = new AdminSetUpService();
+  const adminSetUpService = React.useMemo(() => new AdminSetUpService(), []);
 
-  const onSubmit: SubmitHandler<AdminFormInputs> = async (data) => {
-    setResponseMessage("");
-    setResponseType(null);
+  const onRoleFormSubmit: SubmitHandler<RoleFormInputs> = async (data) => {
+    setResponseRoleSetupMessage("");
+    setRoleResponseType(null);
 
     try {
-      const res = await adminSetUpService.postSetup(data);
-      setResponseMessage(res.data.dustbinId); // Assuming the response is a string or message
-      setResponseType("success");
-      reset();
+      if (roles) {
+        const res = await adminSetUpService.postRoleSetup(data);
+        setResponseRoleSetupMessage(res.data.registrationKey); // Assuming the response is a string or message
+        console.log("Role Setup Response:", res);
+        setRoleResponseType("success");
+        resetRole();
+      }
     } catch (err) {
-      console.error("postSetup Call Failed:", err);
-      setResponseType("error");
+      console.error("getRoleSetup Call Failed:", err);
+      setRoleResponseType("error");
+    }
+  };
+
+  const onDustbinFromSubmit: SubmitHandler<DustbinFormInputs> = async (
+    data
+  ) => {
+    setResponseDustbinSetupMessage("");
+    setDustbinResponseType(null);
+
+    try {
+      const res = await adminSetUpService.postDustbinSetup(data);
+      setResponseDustbinSetupMessage(res.data.dustbinId); // Assuming the response is a string or message
+      setDustbinResponseType("success");
+      resetDustbin();
+    } catch (err) {
+      console.error("postDustbinSetup Call Failed:", err);
+      setDustbinResponseType("error");
     }
   };
 
@@ -54,12 +88,15 @@ const AdminSetup: React.FC = () => {
     setDeleteMessage("");
     setDeleteError(null);
     try {
-      const response = await adminSetUpService.getSetup(dustbinId);
+      const response = await adminSetUpService.getDustbinSetup(dustbinId);
       setFetchedData(response.data);
     } catch (error) {
       console.error("Failed to fetch setup:", error);
       if (axios.isAxiosError(error)) {
-        setFetchError(error.response?.data?.message || "Failed to fetch data.");
+        setFetchError(
+          error.response?.data?.message ||
+            "getDustbinSetup failed to fetch data."
+        );
       } else {
         setFetchError("An unexpected error occurred.");
       }
@@ -72,13 +109,13 @@ const AdminSetup: React.FC = () => {
     setFetchedData(null);
     setFetchError(null);
     try {
-      const response = await adminSetUpService.deleteSetup(dustbinId);
+      const response = await adminSetUpService.deleteDustbinSetup(dustbinId);
       setDeleteMessage(response.data.message); // Assuming it's a string message
     } catch (error) {
       console.error("Failed to delete setup:", error);
       if (axios.isAxiosError(error)) {
         setDeleteError(
-          error.response?.data?.message || "Failed to delete setup."
+          error.response?.data?.message || "Failed to delete dustbin setup."
         );
       } else {
         setDeleteError("An unexpected error occurred.");
@@ -86,11 +123,11 @@ const AdminSetup: React.FC = () => {
     }
   };
 
-  const handleCopy = () => {
-    if (!responseMessage || responseType !== "success") return;
+  const handleCopyDustbinResponse = () => {
+    if (!responseDustbinSetupMessage || dustbinResponseType !== "success") return;
 
     navigator.clipboard
-      .writeText(responseMessage)
+      .writeText(responseDustbinSetupMessage)
       .then(() => {
         setIsCopied(true);
       })
@@ -98,6 +135,34 @@ const AdminSetup: React.FC = () => {
         console.error("Failed to copy text: ", err);
       });
   };
+
+   const handleCopyRoleResponse = () => {
+    if (!responseRoleSetupMessage || roleResponseType !== "success") return;
+
+    navigator.clipboard
+      .writeText(responseRoleSetupMessage)
+      .then(() => {
+        setIsCopied(true);
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const roles = await adminSetUpService.getRoleSetup();
+        if (roles.isSucess) {
+          setRoles(roles.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch Roles", error);
+      }
+    };
+
+    fetchData();
+  }, [adminSetUpService]);
 
   useEffect(() => {
     if (isCopied) {
@@ -115,11 +180,122 @@ const AdminSetup: React.FC = () => {
         <div
           className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} mb-6 text-center md:text-left text-gray-700`}
         >
-          Admin Setup: New Dustbin
+          Role Setup: New Registration Key
         </div>
 
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleRoleSetupSubmit(onRoleFormSubmit)}
+          className="space-y-5 bg-white p-6 rounded-lg shadow-md border border-gray-200"
+        >
+          <div>
+            <label
+              htmlFor="roleType"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Select Role Type
+            </label>
+            <select
+              id="roleId"
+              {...registerRole("roleId", {
+                required: "Please select a role type.",
+              })}
+              className={`w-full p-2.5 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out ${
+                errorsRole.roleId ? "border-red-500" : "border-gray-300"
+              }`}
+              aria-invalid={errorsRole.roleId ? "true" : "false"}
+            >
+              <option value="">-- Select Role Type --</option>
+              {roles.map((role) => (
+                <option key={role.roleId} value={role.roleId}>
+                  {role.roleName}
+                </option>
+              ))}
+            </select>
+            {errorsRole.roleId && (
+              <p className="text-red-600 text-xs mt-1" role="alert">
+                {errorsRole.roleId.message}
+              </p>
+            )}
+          </div>
+          <button
+            type="submit"
+            disabled={isSubmittingRole}
+            className="w-full inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+          >
+            {isSubmittingRole ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Generating Role Registration key...
+              </>
+            ) : (
+              "Generate Registration Key"
+            )}
+          </button>
+        </form>
+
+        {responseRoleSetupMessage && (
+          <div className="mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+            <div
+              className={`${DEFAULT_ITEM_PROPERTIES.heading.heading3} mb-3 ${
+                roleResponseType === "success" ? "text-green-700" : "text-red-700"
+              }`}
+            >
+              {roleResponseType === "success" ? "Generated Registration Key" : "Error"}
+            </div>
+            <div
+              className={`mt-2 p-3 rounded text-sm flex items-center justify-between gap-4 ${
+                roleResponseType === "success"
+                  ? "bg-green-50 border border-green-200"
+                  : "bg-red-50 border border-red-200"
+              }`}
+            >
+              <span
+                className={`break-all font-mono ${
+                  roleResponseType === "success" ? "text-green-800" : "text-red-800"
+                }`}
+              >
+                {responseRoleSetupMessage}
+              </span>
+              {roleResponseType === "success" && (
+                <button
+                  onClick={handleCopyRoleResponse}
+                  className="ml-auto flex-shrink-0 text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium px-2 py-1 rounded border border-transparent hover:border-blue-300 transition duration-150 ease-in-out"
+                  aria-label="Copy Registration Key"
+                >
+                  {isCopied ? "Copied!" : "Copy Key"}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div
+          className={`${DEFAULT_ITEM_PROPERTIES.heading.heading2} mb-6 text-center md:text-left text-gray-700`}
+        >
+          Dustbin Setup: New Dustbin
+        </div>
+
+        <form
+          onSubmit={handleDustbinSetupSubmit(onDustbinFromSubmit)}
           className="space-y-5 bg-white p-6 rounded-lg shadow-md border border-gray-200"
         >
           <div>
@@ -131,31 +307,31 @@ const AdminSetup: React.FC = () => {
             </label>
             <select
               id="dustbinType"
-              {...register("dustbinType", {
+              {...registerDustbin("dustbinType", {
                 required: "Please select a dustbin type.",
               })}
               className={`w-full p-2.5 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out ${
-                errors.dustbinType ? "border-red-500" : "border-gray-300"
+                errorsDustbin.dustbinType ? "border-red-500" : "border-gray-300"
               }`}
-              aria-invalid={errors.dustbinType ? "true" : "false"}
+              aria-invalid={errorsDustbin.dustbinType ? "true" : "false"}
             >
               <option value="">-- Select Dustbin Type --</option>
               <option value="Dry waste">Dry waste</option>
               <option value="Wet waste">Wet waste</option>
             </select>
-            {errors.dustbinType && (
+            {errorsDustbin.dustbinType && (
               <p className="text-red-600 text-xs mt-1" role="alert">
-                {errors.dustbinType.message}
+                {errorsDustbin.dustbinType.message}
               </p>
             )}
           </div>
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmittingDustbin}
             className="w-full inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 ease-in-out"
           >
-            {isSubmitting ? (
+            {isSubmittingDustbin ? (
               <>
                 <svg
                   className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -185,32 +361,32 @@ const AdminSetup: React.FC = () => {
           </button>
         </form>
 
-        {responseMessage && (
+        {responseDustbinSetupMessage && (
           <div className="mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
             <div
               className={`${DEFAULT_ITEM_PROPERTIES.heading.heading3} mb-3 ${
-                responseType === "success" ? "text-green-700" : "text-red-700"
+                dustbinResponseType === "success" ? "text-green-700" : "text-red-700"
               }`}
             >
-              {responseType === "success" ? "Generated Dustbin ID" : "Error"}
+              {dustbinResponseType === "success" ? "Generated Dustbin ID" : "Error"}
             </div>
             <div
               className={`mt-2 p-3 rounded text-sm flex items-center justify-between gap-4 ${
-                responseType === "success"
+                dustbinResponseType === "success"
                   ? "bg-green-50 border border-green-200"
                   : "bg-red-50 border border-red-200"
               }`}
             >
               <span
                 className={`break-all font-mono ${
-                  responseType === "success" ? "text-green-800" : "text-red-800"
+                  dustbinResponseType === "success" ? "text-green-800" : "text-red-800"
                 }`}
               >
-                {responseMessage}
+                {responseDustbinSetupMessage}
               </span>
-              {responseType === "success" && (
+              {dustbinResponseType === "success" && (
                 <button
-                  onClick={handleCopy}
+                  onClick={handleCopyDustbinResponse}
                   className="ml-auto flex-shrink-0 text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium px-2 py-1 rounded border border-transparent hover:border-blue-300 transition duration-150 ease-in-out"
                   aria-label="Copy Dustbin ID"
                 >
@@ -429,7 +605,6 @@ const AdminSetup: React.FC = () => {
               </div>
             </div>
           )} */}
-
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
@@ -476,14 +651,12 @@ const AdminSetup: React.FC = () => {
           )}
         </div>
 
-
-
         {isCopied && (
           <div className="fixed bottom-4 right-4 z-50 w-auto max-w-xs sm:max-w-sm">
             <Alert variant="success" className="shadow-lg">
               <AlertTitle>Copied!</AlertTitle>
               <AlertDescription>
-                Dustbin ID copied to clipboard.
+                ID copied to clipboard.
               </AlertDescription>
             </Alert>
           </div>
