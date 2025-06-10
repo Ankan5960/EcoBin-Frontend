@@ -70,4 +70,25 @@ export class DustbinDataService {
       return getResponse;
     }
   };
+
+  public fetchUserRoute = async (
+    userLocation: LocationData
+  ): Promise<ICollectorDustbinDataResponse> => {
+    const url = `/api/user-data/get-user-path?Latitude=${userLocation.latitude}&Longitude=${userLocation.longitude}`;
+    const getResponse = {} as ICollectorDustbinDataResponse;
+    try {
+      const response = await apiClient.get(url);
+      getResponse.data = response.data;
+      getResponse.isSucess = true;
+      return getResponse;
+    } catch (error) {
+      const errorResponse = error as {
+        response: { data: IErrorResponseModel };
+      };
+      console.error("dustbin data fetch failed:", error);
+      getResponse.errorData = errorResponse.response.data;
+      getResponse.isSucess = false;
+      return getResponse;
+    }
+  }
 }

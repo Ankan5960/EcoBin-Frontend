@@ -12,6 +12,7 @@ import Signup from "./pages/signup-page/signup";
 import AppLayout from "./components/layout/AppLayout";
 import { getDashboardChildren } from "./utility/getDashboardRoutes";
 import { useAuthRole } from "./store/authStore";
+import LandingPage from "./pages/landing-page/landingPage";
 
 export default function AppRouter() {
   const role = useAuthRole();
@@ -39,6 +40,10 @@ export default function AppRouter() {
           path: "login",
           element: <Login />,
         },
+        {
+          path: "ecobin",
+          element: <LandingPage />,
+        }
       ],
     },
   ];

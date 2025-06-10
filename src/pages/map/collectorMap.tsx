@@ -19,12 +19,14 @@ import { DustbinDataService } from "@/components/dustbin-data/dustbin-data.servi
 const generatePopupContent = (
   isDangrouse: boolean | null,
   sensorData: SensorData,
-  category: CategoryEntity
+  category: CategoryEntity,
+  dustbinId: string
 ): string => {
   return `
     <div style="padding: 8px; ${
       isDangrouse ? "background: red;" : "background: white;"
     } font-size: 15px; color: black; border-radius: 5px;">
+      <strong>Dustbin ID:</strong> ${dustbinId}<br/>
       <strong>Weight:</strong> ${sensorData.weightData}<br/>
       <strong>Air Quality:</strong> ${sensorData.airQualityData}<br/>
       <strong>Fill:</strong> ${sensorData.levelFillData}<br/>
@@ -68,7 +70,7 @@ const handleMapLoad = async (map: mapboxgl.Map, datas: DustbinData[]) => {
 
   datas.forEach((data: DustbinData) => {
     const popup = new mapboxgl.Popup().setHTML(
-      generatePopupContent(data.isDangrouse, data.sensorData, data.category)
+      generatePopupContent(data.isDangrouse, data.sensorData, data.category, data.dustbinId)
     );
 
     const markerColor = data.isDangrouse ? "red" : "blue";
