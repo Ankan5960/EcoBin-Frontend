@@ -11,6 +11,8 @@ import {
   RoleFormInputs,
 } from "./admin-setup-model";
 
+const areaOptions = ["new town", "sector v", "kestopur", "rajarhat", "dumdum"];
+
 function formatLabel(key: string) {
   return key
     .replace(/([A-Z])/g, " $1") // insert space before capital letters
@@ -19,26 +21,32 @@ function formatLabel(key: string) {
 
 const AdminSetup: React.FC = () => {
   const [roles, setRoles] = useState<RoleResponse[]>([]);
+
   const {
     register: registerDustbin,
     handleSubmit: handleDustbinSetupSubmit,
     reset: resetDustbin,
     formState: { errors: errorsDustbin, isSubmitting: isSubmittingDustbin },
   } = useForm<DustbinFormInputs>();
+
   const {
     register: registerRole,
     handleSubmit: handleRoleSetupSubmit,
     reset: resetRole,
+    watch,
     formState: { errors: errorsRole, isSubmitting: isSubmittingRole },
   } = useForm<RoleFormInputs>();
-  const [responseRoleSetupMessage, setResponseRoleSetupMessage] = useState<string>("");
-  const [roleResponseType, setRoleResponseType] = useState<"success" | "error" | null>(
-    null
-  );
-  const [responseDustbinSetupMessage, setResponseDustbinSetupMessage] = useState<string>("");
-  const [dustbinResponseType, setDustbinResponseType] = useState<"success" | "error" | null>(
-    null
-  );
+  const [responseRoleSetupMessage, setResponseRoleSetupMessage] =
+    useState<string>("");
+  const [roleResponseType, setRoleResponseType] = useState<
+    "success" | "error" | null
+  >(null);
+  const [responseDustbinSetupMessage, setResponseDustbinSetupMessage] =
+    useState<string>("");
+  const [dustbinResponseType, setDustbinResponseType] = useState<
+    "success" | "error" | null
+  >(null);
+
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [fetchedData, setFetchedData] =
     useState<DustbinDetailsDataModel | null>(null);
@@ -46,6 +54,12 @@ const AdminSetup: React.FC = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>("");
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const adminSetUpService = React.useMemo(() => new AdminSetUpService(), []);
+  const selectedRoleId = watch("roleId");
+
+  const selectedRole = roles.find((role) => role.roleId === selectedRoleId);
+  const shouldShowAreaDropdown =
+    selectedRole?.roleName === "Admin" ||
+    selectedRole?.roleName === "Collector";
 
   const onRoleFormSubmit: SubmitHandler<RoleFormInputs> = async (data) => {
     setResponseRoleSetupMessage("");
@@ -124,7 +138,8 @@ const AdminSetup: React.FC = () => {
   };
 
   const handleCopyDustbinResponse = () => {
-    if (!responseDustbinSetupMessage || dustbinResponseType !== "success") return;
+    if (!responseDustbinSetupMessage || dustbinResponseType !== "success")
+      return;
 
     navigator.clipboard
       .writeText(responseDustbinSetupMessage)
@@ -136,7 +151,7 @@ const AdminSetup: React.FC = () => {
       });
   };
 
-   const handleCopyRoleResponse = () => {
+  const handleCopyRoleResponse = () => {
     if (!responseRoleSetupMessage || roleResponseType !== "success") return;
 
     navigator.clipboard
@@ -217,6 +232,46 @@ const AdminSetup: React.FC = () => {
               </p>
             )}
           </div>
+
+          {shouldShowAreaDropdown && (
+            <div>
+              <label
+                htmlFor="area"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Select Area Name
+              </label>
+              <select
+                id="areaOfService"
+                {...registerRole("areaOfService", {
+                  validate: (value) =>
+                    shouldShowAreaDropdown
+                      ? value !== ""
+                        ? true
+                        : "Please select an area."
+                      : true,
+                })}
+                className={`w-full p-2.5 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out ${
+                  errorsRole.areaOfService
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+              >
+                <option value="">-- Select Area --</option>
+                {areaOptions.map((area, index) => (
+                  <option key={index} value={area}>
+                    {area}
+                  </option>
+                ))}
+              </select>
+              {errorsRole.areaOfService && (
+                <p className="text-red-600 text-xs mt-1" role="alert">
+                  {errorsRole.areaOfService.message}
+                </p>
+              )}
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={isSubmittingRole}
@@ -256,10 +311,14 @@ const AdminSetup: React.FC = () => {
           <div className="mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
             <div
               className={`${DEFAULT_ITEM_PROPERTIES.heading.heading3} mb-3 ${
-                roleResponseType === "success" ? "text-green-700" : "text-red-700"
+                roleResponseType === "success"
+                  ? "text-green-700"
+                  : "text-red-700"
               }`}
             >
-              {roleResponseType === "success" ? "Generated Registration Key" : "Error"}
+              {roleResponseType === "success"
+                ? "Generated Registration Key"
+                : "Error"}
             </div>
             <div
               className={`mt-2 p-3 rounded text-sm flex items-center justify-between gap-4 ${
@@ -270,7 +329,9 @@ const AdminSetup: React.FC = () => {
             >
               <span
                 className={`break-all font-mono ${
-                  roleResponseType === "success" ? "text-green-800" : "text-red-800"
+                  roleResponseType === "success"
+                    ? "text-green-800"
+                    : "text-red-800"
                 }`}
               >
                 {responseRoleSetupMessage}
@@ -365,10 +426,14 @@ const AdminSetup: React.FC = () => {
           <div className="mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
             <div
               className={`${DEFAULT_ITEM_PROPERTIES.heading.heading3} mb-3 ${
-                dustbinResponseType === "success" ? "text-green-700" : "text-red-700"
+                dustbinResponseType === "success"
+                  ? "text-green-700"
+                  : "text-red-700"
               }`}
             >
-              {dustbinResponseType === "success" ? "Generated Dustbin ID" : "Error"}
+              {dustbinResponseType === "success"
+                ? "Generated Dustbin ID"
+                : "Error"}
             </div>
             <div
               className={`mt-2 p-3 rounded text-sm flex items-center justify-between gap-4 ${
@@ -379,7 +444,9 @@ const AdminSetup: React.FC = () => {
             >
               <span
                 className={`break-all font-mono ${
-                  dustbinResponseType === "success" ? "text-green-800" : "text-red-800"
+                  dustbinResponseType === "success"
+                    ? "text-green-800"
+                    : "text-red-800"
                 }`}
               >
                 {responseDustbinSetupMessage}
@@ -655,9 +722,7 @@ const AdminSetup: React.FC = () => {
           <div className="fixed bottom-4 right-4 z-50 w-auto max-w-xs sm:max-w-sm">
             <Alert variant="success" className="shadow-lg">
               <AlertTitle>Copied!</AlertTitle>
-              <AlertDescription>
-                ID copied to clipboard.
-              </AlertDescription>
+              <AlertDescription>ID copied to clipboard.</AlertDescription>
             </Alert>
           </div>
         )}

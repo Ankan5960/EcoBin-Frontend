@@ -7,6 +7,7 @@ export type DustbinFormInputs = {
 
 export type RoleFormInputs = {
   roleId: string;
+  areaOfService: string;
 };
 
 export interface IDustbinSetUpPostRequest {
