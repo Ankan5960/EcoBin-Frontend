@@ -60,6 +60,7 @@ apiClient.interceptors.response.use(
           return apiClient.request(error.config);
         } catch (err) {
           clearAuthState();
+          window.location.href = "/dashboard";
         }
       }
     }

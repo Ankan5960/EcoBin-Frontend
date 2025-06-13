@@ -21,7 +21,8 @@ export function AvtarDropdown() {
 
   const handleLogOut = async () => {
     user && (await logoutService.logout({ refreshToken: user.refreshToken }));
-    navigate("/login");
+    // navigate("/login");
+    window.location.href = "/login";
   };
 
   const handelLogIn = () => {
