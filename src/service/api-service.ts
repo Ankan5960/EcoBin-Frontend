@@ -1,3 +1,8 @@
+import {
+  clearAuthState,
+  fetchUserDataFromLocalStorage,
+  setAuthState,
+} from "@/store/authStore";
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 // import { IStorage } from "../storage/IStorage";
 // import { IAuthState } from "../auth/auth-store";
@@ -35,14 +40,35 @@ apiClient.interceptors.response.use(
     if (error.code === "ECONNABORTED") {
       console.error("Request timed out");
       return Promise.reject(new Error("Request timed out"));
+    } else if (error.response.status === 401) {
+      const user = fetchUserDataFromLocalStorage();
+      const refreshToken = user?.refreshToken;
+      if (refreshToken) {
+        try {
+          const response = await axios.post(
+            `${getBaseUrl()}/api/user-auth/auth/refresh-token`,
+            {
+              refreshToken: refreshToken,
+              ipAddress: "",
+              deviceInfo: "",
+            }
+          );
+
+          setAuthState(response.data);
+
+          error.config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          return apiClient.request(error.config);
+        } catch (err) {
+          clearAuthState();
+        }
+      }
     }
+    return Promise.reject(error);
   }
 );
 
 export const getAccessToken = async () => {
-  // const storage = new LocalStorage<string>();
-  // return await storage.get(BrowserStorageKeys.ACCESS_TOKEN);
-  const userDataString = localStorage.getItem("user"); // replace with actual key if different
+  const userDataString = localStorage.getItem("user");
   if (!userDataString) return null;
 
   try {
@@ -53,19 +79,5 @@ export const getAccessToken = async () => {
     return null;
   }
 };
-
-// const setAccessToken = async (accessToken: string) => {
-//   const storage = new LocalStorage<string>();
-//   await storage.set(BrowserStorageKeys.ACCESS_TOKEN, accessToken);
-// };
-
-// const setAuth = async (user: IUserLoginResponse) => {
-//   const auth: IAuthState = {
-//     isAuthorized: true,
-//     user: user,
-//   };
-//   const authLocalStore: IStorage<IAuthState> = new LocalStorage<IAuthState>();
-//   await authLocalStore.set(BrowserStorageKeys.AUTH_STATE, auth);
-// };
 
 export default apiClient;

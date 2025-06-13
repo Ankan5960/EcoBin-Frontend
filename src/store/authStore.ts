@@ -6,7 +6,7 @@ interface AuthState {
   authUser: IUserLoginResponse | null;
 }
 
-const fetchUserDataFromLocalStorage = (): IUserLoginResponse | null => {
+export const fetchUserDataFromLocalStorage = (): IUserLoginResponse | null => {
   const storage = new LocalStorage<IUserLoginResponse>();
   return storage.get("user");
 };

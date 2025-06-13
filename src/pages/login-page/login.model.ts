@@ -15,7 +15,9 @@ export interface IUserLoginResponse {
   lastName: string;
   roleId: string;
   roleName: string;
+  areaOfService: string
   accessToken: string;
+  refreshToken: string;
 }
 
 export interface ILoginResponse {

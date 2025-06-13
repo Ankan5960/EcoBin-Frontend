@@ -22,13 +22,9 @@ export class LogInService {
     const loginResponse = {} as ILoginResponse;
     try {
       const response = await apiClient.post(url, loginData);
-      console.log("User data:", response.data);
 
       loginResponse.userData = response.data;
       loginResponse.isSuccess = true;
-      // if (loginResponse.userData) {
-      //   this.userLocalStorage.set("user", loginResponse.userData);
-      // }
       setStorage(loginResponse.userData);
       return loginResponse;
     } catch (error) {

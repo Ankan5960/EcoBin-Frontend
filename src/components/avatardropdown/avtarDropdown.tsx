@@ -10,15 +10,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { clearAuthState, useAuthRole, useAuthState } from "@/store/authStore";
+import { useAuthRole, useAuthState } from "@/store/authStore";
+import { LogOutService } from "./logout.service";
 
 export function AvtarDropdown() {
   const navigate = useNavigate();
   const role = useAuthRole();
   const user = useAuthState();
+  const logoutService = new LogOutService();
 
-  const handleLogOut = () => {
-    clearAuthState();
+  const handleLogOut = async () => {
+    user && (await logoutService.logout({ refreshToken: user.refreshToken }));
     navigate("/login");
   };
 

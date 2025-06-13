@@ -12,6 +12,18 @@ export function useCollectorDustbinData(localityName: string) {
   const locationData = userLocationStore((state) => state.location);
   const collectorDustbinData = useMemo(() => new DustbinDataService(), []);
   const lastLocation = useRef<LocationData | null>(null);
+  
+  const areaOfService = useMemo(() => {
+    try {
+      const userData = localStorage.getItem("user");
+      if (!userData) return null;
+      const parsed = JSON.parse(userData);
+      return parsed.areaOfService ?? null;
+    } catch (e) {
+      console.error("Failed to parse user from localStorage", e);
+      return null;
+    }
+  }, []);
 
   useEffect(() => {
     const hasLocationChanged =
@@ -24,7 +36,7 @@ export function useCollectorDustbinData(localityName: string) {
       setLoading(true);
       try {
         const res = await collectorDustbinData.fetchCollectorDustbinData({
-          localityName: localityName || null,
+          localityName: areaOfService || null,
           latitude: locationData?.latitude || "",
           longitude: locationData?.longitude || "",
         });
