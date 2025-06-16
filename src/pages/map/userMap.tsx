@@ -21,9 +21,9 @@ const generatePopupContent = (
 ): string => {
   return `
     <div style="padding: 8px; background: white; font-size: 15px; color: black; border-radius: 5px;">
-      <strong>Weight:</strong> ${sensorData.weightData}<br/>
-      <strong>Air Quality:</strong> ${sensorData.airQualityData}<br/>
-      <strong>Fill:</strong> ${sensorData.levelFillData}<br/>
+      <strong>Weight:</strong> ${sensorData.weightData} g<br/>
+      <strong>Air Quality:</strong> ${sensorData.airQualityData} AQI<br/>
+      <strong>Fill:</strong> ${sensorData.levelFillData} %<br/>
       <strong>Category:</strong> ${category.categoryName}
     </div>
   `;
